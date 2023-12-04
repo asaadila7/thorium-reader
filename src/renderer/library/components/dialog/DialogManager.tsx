@@ -47,7 +47,6 @@ class DialogManager extends React.Component<IProps, undefined> {
         return (
             <>
                 <ApiappAddForm></ApiappAddForm>
-                <OpdsFeedAddForm></OpdsFeedAddForm>
                 <OpdsFeedUpdateForm></OpdsFeedUpdateForm>
                 <FileImport></FileImport>
                 <DeletePublicationConfirm></DeletePublicationConfirm>

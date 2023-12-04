@@ -38,11 +38,14 @@
 }
 
 .modal_dialog {
-  margin: 30px;
-  min-height: 400px;
-  min-width: 700px;
-  max-width: calc(100vw - 60px);
-  max-height: calc(100vh - 60px);
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+
+  /* min-height: 570px; */
+  min-width: 800px;
+  max-width: 960px;
+  max-height: calc(100vh - 100px);
   border-radius: 10px;
   z-index: 102;
   display: flex;
@@ -52,8 +55,12 @@
   overflow-x: hidden;
   align-content: flex-start;
   color: var(--color-primary);;
-  position: relative;
+  position: fixed;
   box-sizing: border-box;
+
+  @media screen and (width <= 960px) {
+    width: 100vw;
+  }
 
   &.modal_dialog_full {
     width: calc(100vw - 60px);
@@ -87,7 +94,7 @@
 .modal_dialog_footer {
   display: flex;
   flex: none;
-  padding: 0 20px;
+  margin: 0 20px;
   align-items: center;
   height: 70px;
 }
@@ -110,6 +117,11 @@
 .modal_dialog_footer {
   justify-content: end;
   border-top: 1px solid var(--color-medium-grey);
+  position: sticky;
+  bottom: 0;
+  right: 0;
+  background-color: var(--color-secondary);
+  gap: 10px;
 
   & [type="submit"] {
     min-width: 100px;
