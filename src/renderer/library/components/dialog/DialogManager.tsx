@@ -9,7 +9,6 @@ import * as React from "react";
 import { connect } from "react-redux";
 import PublicationInfo from "readium-desktop/renderer/library/components/dialog/publicationInfos/PublicationInfo";
 import { ILibraryRootState } from "readium-desktop/common/redux/states/renderer/libraryRootState";
-import ApiappAddForm from "./ApiappAddForm";
 
 import DeleteOpdsFeedConfirm from "./DeleteOpdsFeedConfirm";
 import DeletePublicationConfirm from "./DeletePublicationConfirm";
@@ -46,7 +45,6 @@ class DialogManager extends React.Component<IProps, undefined> {
 
         return (
             <>
-                <ApiappAddForm></ApiappAddForm>
                 <OpdsFeedAddForm></OpdsFeedAddForm>
                 <OpdsFeedUpdateForm></OpdsFeedUpdateForm>
                 <FileImport></FileImport>

@@ -16,6 +16,7 @@ import {
 } from "readium-desktop/renderer/common/components/hoc/translator";
 import SVG from "readium-desktop/renderer/common/components/SVG";
 import { TDispatch } from "readium-desktop/typings/redux";
+import ApiappAddFormDialog from "../dialog/ApiappAddForm";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IBaseProps extends TranslatorProps {
@@ -45,13 +46,7 @@ export class OpdsAddForm extends React.Component<IProps, undefined> {
                     <SVG ariaHidden={true} svg={AddIcon}/>
                     <span>{ __("opds.addForm.title")}</span>
                 </button>
-                <button
-                    onClick={this.props.openApiappAddForm}
-                    className={stylesButtons.button_primary}
-                >
-                    <SVG ariaHidden={true} svg={AddIcon} />
-                    <span>{__("opds.addFormApiapp.title")}</span>
-                </button>
+                <ApiappAddFormDialog />
             </section>
         );
     }
