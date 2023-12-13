@@ -44,9 +44,10 @@ export class PublicationAddButton extends React.Component<IProps, undefined> {
         // htmlFor="epubInput"
         return (
             <label
-                className={classNames(stylesButtons.button_primary_small, stylesButtons.button_icon)}
+                className={stylesButtons.button_nav_secondary}
             >
                 <SVG ariaHidden={true} svg={PlusIcon} title={__("header.importTitle")} />
+                <h3>{__("header.importTitle")}</h3>
                 <input
                     id="epubInput"
                     type="file"

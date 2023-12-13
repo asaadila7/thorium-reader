@@ -144,7 +144,7 @@ class Header extends React.Component<IProps, undefined> {
                     replace={true}
                     aria-pressed={active}
                     role={"button"}
-                    className={active ? stylesButtons.button_secondary_blue : ""}
+                    className={active ? stylesButtons.button_nav_secondary : ""}
                 >
                     <SVG ariaHidden svg={item.svg} />
                     <h3>{
