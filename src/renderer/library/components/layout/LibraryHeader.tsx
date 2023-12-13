@@ -9,19 +9,26 @@ import classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import * as stylesHeader from "readium-desktop/renderer/assets/styles/header.css";
+import * as stylesHeader from "readium-desktop/renderer/assets/styles/header.scss";
+import * as stylesButtons from "readium-desktop/renderer/assets/styles/components/buttons.css";
+
 import {
     TranslatorProps, withTranslator,
 } from "readium-desktop/renderer/common/components/hoc/translator";
 import SkipLink from "readium-desktop/renderer/common/components/SkipLink";
 import { ILibraryRootState } from "readium-desktop/common/redux/states/renderer/libraryRootState";
 import { DisplayType, IRouterLocationState } from "../../routing";
+import * as PageIcon from "readium-desktop/renderer/assets/icons/page-icon.svg";
+import * as GearIcon from "readium-desktop/renderer/assets/icons/gear-icon.svg";
+import * as ShelfIcon from "readium-desktop/renderer/assets/icons/shelf-icon.svg";
+import SVG from "readium-desktop/renderer/common/components/SVG";
 
 interface NavigationHeader {
     route: string;
     label: string;
     matchRoutes: string[];
     styles: string[];
+    svg: any;
 }
 
 const headerNav: NavigationHeader[] = [
@@ -30,18 +37,21 @@ const headerNav: NavigationHeader[] = [
         label: "books",
         matchRoutes: ["/", "/library"],
         styles: [],
+        svg: PageIcon,
     },
     {
         route: "/opds",
         label: "catalogs",
         matchRoutes: ["/opds"],
         styles: [],
+        svg: ShelfIcon,
     },
     {
         route: "/settings",
         label: "settings",
         matchRoutes: ["/settings"],
         styles: [],
+        svg: GearIcon,
     },
 ];
 
@@ -131,15 +141,15 @@ class Header extends React.Component<IProps, undefined> {
                 <Link
                     to={nextLocation}
                     state = {{displayType: (nextLocation.state && (nextLocation.state as IRouterLocationState).displayType) ? (nextLocation.state as IRouterLocationState).displayType : DisplayType.Grid}}
-
                     replace={true}
-
                     aria-pressed={active}
                     role={"button"}
+                    className={active ? stylesButtons.button_secondary_blue : ""}
                 >
-                    {
+                    <SVG ariaHidden svg={item.svg} />
+                    <h3>{
                         translate("header." + item.label)
-                    }
+                    }</h3>
                 </Link>
             </li>
         );

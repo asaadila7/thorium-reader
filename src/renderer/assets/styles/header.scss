@@ -1,0 +1,163 @@
+/*
+=-=-= header.css => './partials/mixins.css'
+*/
+@import url('./partials/mixins.css');
+
+/*
+=-=-= header.css => './partials/variables.css'
+*/
+
+/*
+@import url('./partials/variables.css');
+*/
+
+/*
+=-=-= header.css
+*/
+
+.main_navigation_library {
+  z-index: 102;
+  top: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 100vh;
+  background-color: var(--color-figma-grey);
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.19);
+//   width: 250px;
+    flex: 1;
+
+  & ul {
+    margin-top: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+
+    & a {
+      text-decoration: none;
+      color: inherit;
+      min-width: 150px;
+      justify-content: start;
+      gap: 10px;
+      display: flex;
+      padding: 5px;
+    }
+
+    & li {
+      display: block;
+      padding-bottom: 10px;
+      padding-top: 10px;
+      font-weight: 600;
+      color: var(--color-disabled);
+      cursor: pointer;
+      border: 1px solid transparent;
+      height: 30px;
+      border-radius: 4px;
+      min-width: 150px;
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    
+      svg {
+        width: 12px;
+        fill: var(--color-button-primary);
+      }
+
+      &.active {
+        color: var(--color-button-primary);
+      }
+    }
+  }
+}
+
+.preferences {
+  position: relative;
+  float: right;
+}
+
+/* ============ SECONDARY NAVIGATION =============== */
+
+.nav_secondary {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid var(--color-light-grey);
+  background-color: var(--color-secondary);
+  height: 3.5rem;
+  z-index: 101;
+  min-width: 600px;
+
+  & form {
+    display: inline-block;
+    border-bottom: 1px solid #c1c1c1;
+    margin-left: 40px;
+    height: auto;
+  }
+
+  & input[type=search] {
+    position: relative;
+    width: 225px;
+    border-radius: 0;
+    border: none;
+    height: 35px;
+    background-color: transparent;
+    color: var(--color-primary);
+    font-size: 0.9rem;
+  }
+
+  & input[type=search]::placeholder {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: #c1c1c1;
+  }
+
+  & form button {
+    position: relative;
+    top: 10px;
+    height: 38px;
+    width: 36px;
+    background-color: transparent;
+  }
+
+  & form[role="search"] {
+    margin: 0 30px;
+    flex: 1;
+
+    & input {
+      width: 100% !important;
+    }
+  }
+}
+
+.nav_secondary svg {
+  display: inline-block;
+  position: relative;
+  width: 35px;
+  height: 35px;
+}
+
+.nav_secondary svg:nth-child(2) {
+  margin-left: 20px;
+}
+
+.skip_link {
+  position: absolute;
+  left: -2000px;
+
+  &:focus {
+    left: unset;
+    left: 0;
+    width: fit-content;
+    top: 0;
+    opacity: 1;
+    height: unset;
+    z-index: 150;
+    font-size: 1rem;
+    padding: 1rem;
+    color: white;
+    background-color: #0366d6;
+  }
+}
+
+.___DEBUG___HEADER_CSS {
+  display: none;
+}
