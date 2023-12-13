@@ -57,7 +57,7 @@ class CatalogListView extends React.Component<IProps, undefined> {
                             <div className={stylesGlobal.heading}>
                                 <h2>{ entry.title }</h2>
 
-                                <Link
+                                {/* <Link
                                     className={stylesButtons.button_primary_small}
                                     to={{
                                         ...this.props.location,
@@ -67,7 +67,7 @@ class CatalogListView extends React.Component<IProps, undefined> {
                                     title={`${this.props.__("header.allBooks")} (${entry.title})`}
                                 >
                                     {this.props.__("header.allBooks")}
-                                </Link>
+                                </Link> */}
                             </div>
                         }
                         {

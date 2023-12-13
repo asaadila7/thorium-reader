@@ -87,9 +87,32 @@ export class PublicationListElement extends React.Component<IProps> {
                 formatedPublishedYear = "" + moment(pub.publishedAt).year();
             }
 
+            let formatedPubFormat = "";
+        switch (true) {
+            case pub.isAudio: 
+                formatedPubFormat = "Audio";
+                break
+            case pub.isDivina: 
+                formatedPubFormat = "Divina";
+                break
+            case pub.isPDF: 
+                formatedPubFormat = "PDF";
+                break
+            case pub.isDaisy: 
+                formatedPubFormat = "DAISY";
+                break
+            case pub.isFXL: 
+                formatedPubFormat = "EPUB";
+                break
+            default : 
+            formatedPubFormat = "EPUB";
+        }
+
             publisherComponent = <div>
                 <p>{formatedPublishedYear}</p>
                 <p>{formatedPublishers}</p>
+                <p className={stylesButtons.button_format}>{formatedPubFormat}</p>
+                <p>"PROGRESSION"</p>
             </div>;
         }
 
@@ -102,24 +125,6 @@ export class PublicationListElement extends React.Component<IProps> {
 
         return (
             <>
-                <Menu
-                    button={
-                        (<SVG
-                            title={`${this.props.__("accessibility.bookMenu")} (${pub.documentTitle})`}
-                            className={stylesButtons.button_transparency_icon}
-                            svg={MenuIcon}
-                        />)
-                    }
-                    content={(
-                        <div
-                            id={this.menuId}
-                            className={(stylesDropDown.dropdown_menu)}
-                        >
-                            {this.props.menuContent}
-                        </div>
-                    )}
-                    dir="left"
-                />
                 {/* <button
                     type="button"
                     aria-expanded={this.state.menuOpen}
@@ -164,6 +169,24 @@ export class PublicationListElement extends React.Component<IProps> {
                         </div>
                     </AccessibleMenu>
                 } */}
+                <Menu
+                    button={
+                        (<SVG
+                            title={`${this.props.__("accessibility.bookMenu")} (${pub.documentTitle})`}
+                            className={stylesButtons.button_transparency_icon}
+                            svg={MenuIcon}
+                        />)
+                    }
+                    content={(
+                        <div
+                            id={this.menuId}
+                            className={(stylesDropDown.dropdown_menu)}
+                        >
+                            {this.props.menuContent}
+                        </div>
+                    )}
+                    dir="left"
+                />
             </>
         );
     }

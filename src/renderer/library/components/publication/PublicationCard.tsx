@@ -63,6 +63,31 @@ class PublicationCard extends React.Component<IProps> {
         const pubTitleIsRTL = langStringIsRTL(pubTitleLang);
         const pubTitleStr = pubTitleLangStr && pubTitleLangStr[1] ? pubTitleLangStr[1] : "";
 
+        let pubFormat;
+        // console.log("publicationViewMaybeOpds : ", publicationViewMaybeOpds);
+        // console.log(publicationViewMaybeOpds.isAudio)
+        
+
+        // switch (publicationViewMaybeOpds) {
+        //     case isAudio: 
+        //         pubFormat = "Audio";
+        //         break
+        //     case isDivina: 
+        //         pubFormat = "Divina";
+        //         break
+        //     case isPdf: 
+        //         pubFormat = "PDF";
+        //         break
+        //     case isDaisy: 
+        //         pubFormat = "DAISY";
+        //         break
+        //     case isFXL: 
+        //         pubFormat = "EPUB";
+        //         break
+        //     default : 
+        //     pubFormat = "EPUB";
+        // }
+
         // aria-haspopup="dialog"
         // aria-controls="dialog"
         return (
@@ -91,23 +116,26 @@ class PublicationCard extends React.Component<IProps> {
                             {this.truncateAuthors(authors)}
                         </p>
                     </a>
-                    <Menu
-                        button={(
-                            <SVG title={`${__("accessibility.bookMenu")} (${publicationViewMaybeOpds.documentTitle})`} svg={MenuIcon} />
-                        )}
-                        content={(
-                            <div className={classNames(stylesDropDown.dropdown_menu, stylesDropDown.dropdown_publication)}>
-                                {isOpds ?
-                                    <OpdsMenu
-                                        opdsPublicationView={publicationViewMaybeOpds as IOpdsPublicationView}
-                                    /> :
-                                    <CatalogMenu
-                                        publicationView={publicationViewMaybeOpds as PublicationView}
-                                    />}
-                            </div>
-                        )}
-                        dir="right"
-                    />
+                    <div>
+                        <Menu
+                            button={(
+                                <SVG title={`${__("accessibility.bookMenu")} (${publicationViewMaybeOpds.documentTitle})`} svg={MenuIcon} />
+                            )}
+                            content={(
+                                <div className={classNames(stylesDropDown.dropdown_menu, stylesDropDown.dropdown_publication)}>
+                                    {isOpds ?
+                                        <OpdsMenu
+                                            opdsPublicationView={publicationViewMaybeOpds as IOpdsPublicationView}
+                                        /> :
+                                        <CatalogMenu
+                                            publicationView={publicationViewMaybeOpds as PublicationView}
+                                        />}
+                                </div>
+                            )}
+                            dir="right"
+                        />
+
+                    </div>
                 </div>
             </div>
         );

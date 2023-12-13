@@ -2,6 +2,7 @@ declare const styles: {
   readonly "___DEBUG___COMPONENTS_BUTTONS_CSS": string;
   readonly "block_line": string;
   readonly "button_catalog_infos": string;
+  readonly "button_format": string;
   readonly "button_icon": string;
   readonly "button_keyboard": string;
   readonly "button_link": string;

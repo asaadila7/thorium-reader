@@ -87,8 +87,8 @@ class CatalogGridView extends React.Component<IProps, IState> {
                     this.props.catalogEntries.map((entry, entryIndex: number) =>
                             entry.totalCount > 0
                                 ? (
-                                    <section key={entryIndex}>
-                                        {
+                                    <section key={entryIndex} style={{marginBottom: "0"}}>
+                                        {/* {
 
                                             <div className={stylesGlobal.heading}>
                                                 <h2>{entry.title}</h2>
@@ -104,7 +104,8 @@ class CatalogGridView extends React.Component<IProps, IState> {
                                                     {this.props.__("header.allBooks")}
                                                 </Link>
                                             </div>
-                                        }
+                                        } */}
+                                         <h2 style={{fontSize: "20px"}}>{entry.title}</h2>
                                         {
                                             <Slider
                                                 className={stylesSlider.slider}

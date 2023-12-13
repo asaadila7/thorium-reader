@@ -40,6 +40,13 @@ const headerNav: NavigationHeader[] = [
         svg: PageIcon,
     },
     {
+        route: "/library/search/all",
+        label: "allBooks",
+        matchRoutes: ["/library/search/all"],
+        styles: [],
+        svg: ShelfIcon
+    },
+    {
         route: "/opds",
         label: "catalogs",
         matchRoutes: ["/opds"],

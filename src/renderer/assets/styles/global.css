@@ -171,6 +171,7 @@ section {
   right: 0;
   top: 57px;
   flex: 6;
+  height: 100vh;
 }
 
 nav + nav + .main {

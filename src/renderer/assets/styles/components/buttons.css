@@ -251,9 +251,10 @@ button {
 
 .button_transparency_icon,
 .button_transparency_icon_inactive {
-  height: 34px;
-  width: 34px;
+  height: 24px;
+  width: 24px;
   transition-duration: 0ms;
+  fill: var(--color-button-primary);
 
   & svg {
     height: 34px;
@@ -375,6 +376,20 @@ button {
   input {
     display: none;
   }
+}
+
+.button_format {
+  border: 1px solid var(--color-button-primary);
+  border-radius: 4px;
+  background-color: var(--color-button-secondary);
+  color: var(--color-button-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-width: 30px!important;
+  width: fit-content!important;
+  cursor: pointer;
 }
 
 .button_catalog_infos {

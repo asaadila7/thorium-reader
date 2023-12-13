@@ -93,13 +93,13 @@
   width: 100%;
   margin-top: 10px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
   font-size: 15px;
 
   & button {
-    width: 30px;
+    width: 20px;
   }
 
   & .publication_infos {
@@ -169,14 +169,20 @@
 
   & .publication_list_title_authors {
     margin-right: 20px;
-    width: calc(60% - 20px);
+    width: 50%;
+    max-width: 300px;
   }
 
   & div:last-child {
-    width: 40%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 50%;
+
+    & p {
+      width: 100px;
+      margin: 0 5px;
+    }
   }
 }
 
