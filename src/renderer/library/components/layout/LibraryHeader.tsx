@@ -33,9 +33,9 @@ interface NavigationHeader {
 
 const headerNav: NavigationHeader[] = [
     {
-        route: "/library",
+        route: "/home",
         label: "books",
-        matchRoutes: ["/", "/library"],
+        matchRoutes: ["/", "/home"],
         styles: [],
         svg: PageIcon,
     },

@@ -81,8 +81,8 @@ const _routes = {
         // exact: true,
         component: AllPublicationPage,
     } as Route,
-    "/library": {
-        path: "/library",
+    "/home": {
+        path: "/home",
         // exact: true,
         component: Catalog,
     } as Route,
