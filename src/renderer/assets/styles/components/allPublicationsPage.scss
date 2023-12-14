@@ -1,0 +1,15 @@
+.allBooks {
+    &_header {
+        font-size: 18px;
+        &_navigation {
+            background-color: var(--color-figma-grey);
+            border-radius: 6px;
+            height: 96px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 20px;
+            margin: 10px 0;
+        }
+    }
+}

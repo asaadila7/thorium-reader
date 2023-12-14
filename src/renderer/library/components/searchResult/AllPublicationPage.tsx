@@ -15,11 +15,15 @@ import { IStringMap } from "@r2-shared-js/models/metadata-multilang";
 import { Location } from "history";
 import SVG from "readium-desktop/renderer/common/components/SVG";
 // import * as SearchIcon from "readium-desktop/renderer/assets/icons/baseline-search-24px-grey.svg";
+import * as stylesPublication from "readium-desktop/renderer/assets/styles/components/allPublicationsPage.scss";
+import * as stylesInput from "readium-desktop/renderer/assets/styles/components/inputs.css";
 import * as magnifyingGlass from "readium-desktop/renderer/assets/icons/magnifying_glass.svg";
 import * as ArrowRightIcon from "readium-desktop/renderer/assets/icons/baseline-play_arrow-24px.svg"; // baseline-arrow_forward_ios-24px -- arrow
 // import * as ArrowLeftIcon from "readium-desktop/renderer/assets/icons/baseline-arrow_left_ios-24px.svg";
-import * as ArrowLastIcon from "readium-desktop/renderer/assets/icons/baseline-skip_next-24px.svg";
-import * as ArrowFirstIcon from "readium-desktop/renderer/assets/icons/baseline-skip_previous-24px.svg";
+import * as ArrowLastIcon from "readium-desktop/renderer/assets/icons/arrowLast-icon.svg";
+import * as SearchIcon from "readium-desktop/renderer/assets/icons/search-icon.svg";
+import * as ArrowFirstIcon from "readium-desktop/renderer/assets/icons/arrowFirst-icon.svg";
+import * as ChevronRight from "readium-desktop/renderer/assets/icons/chevron-right.svg";
 import { matchSorter } from "match-sorter";
 import { readerActions } from "readium-desktop/common/redux/actions";
 import { DialogTypeName } from "readium-desktop/common/models/dialog";
@@ -78,6 +82,8 @@ import {
     ensureKeyboardListenerIsInstalled, registerKeyboardListener, unregisterKeyboardListener,
 } from "readium-desktop/renderer/common/keyboard";
 import { ipcRenderer } from "electron";
+import CatalogGridView from "readium-desktop/renderer/library/components/catalog/GridView"
+import PublicationCard from "../publication/PublicationCard";
 
 // import {
 //     formatContributorToString,
@@ -188,7 +194,7 @@ export class AllPublicationPage extends React.Component<IProps, IState> {
             <LibraryLayout
                 title={`${__("catalog.myBooks")} / ${title}`}
                 secondaryHeader={secondaryHeader}
-                breadCrumb={breadCrumb}
+                // breadCrumb={breadCrumb}
             >
                 {
                     this.state.publicationViews ?
@@ -356,34 +362,17 @@ const CellGlobalFilter: React.FC<ITableCellProps_GlobalFilter> = (props) => {
     // className={classNames(classStyleExample)}
 
     return (
-        <div
-            style={{
-                // border: "1px solid blue",
-                textAlign: "left",
-            }}>
-
+        <div className={stylesInput.form_group} style={{backgroundColor: "white", width: "370px", height: "30px"}}>
             <label
                 id="globalSearchLabel"
                 htmlFor="globalSearchInput"
                 style={{
-                    fontSize: "90%",
-                    fontWeight: "bold",
+                    backgroundColor: "var(--color-figma-grey)",
+                    top: "-19px"
                 }}>
                 {`${props.__("header.searchPlaceholder")}`}
             </label>
-            <div
-                    aria-live="assertive"
-                    style={{
-                        // border: "1px solid red",
-                        marginLeft: "0.4em",
-                        display: "inline-block",
-                        fontSize: "90%",
-                        // width: "4em",
-                        overflow: "visible",
-                        whiteSpace: "nowrap",
-                    }}>
-                {props.globalFilteredRows.length !== props.preGlobalFilteredRows.length ? ` (${props.globalFilteredRows.length} / ${props.preGlobalFilteredRows.length})` : ` (${props.preGlobalFilteredRows.length})`}
-            </div>
+            <i style={{position: "relative", width: "25px", height: "25px", margin: "auto"}}><SVG ariaHidden svg={SearchIcon} /></i>
             {/*
             value={value || ""}
             */}
@@ -408,18 +397,27 @@ const CellGlobalFilter: React.FC<ITableCellProps_GlobalFilter> = (props) => {
                 }}
                 placeholder={`${props.__("header.searchTitle")}`}
                 style={{
-                    border: "1px solid gray",
-                    borderRadius: "4px",
                     margin: "0",
                     marginLeft: "0.4em",
-                    width: "10em",
+                    width: "100%",
                     padding: "0.2em",
+                    height: "30px"
                 }}
                 />
+                <div
+                    aria-live="assertive"
+                    style={{
+                        // border: "1px solid red",
+                        marginLeft: "0.4em",
+                        display: "inline-block",
+                        // width: "4em",
+                        overflow: "visible",
+                        whiteSpace: "nowrap",
+                    }}>
+                {props.globalFilteredRows.length !== props.preGlobalFilteredRows.length ? ` (${props.globalFilteredRows.length} / ${props.preGlobalFilteredRows.length})` : ` (${props.preGlobalFilteredRows.length})`}
+            </div>
             {props.accessibilitySupportEnabled ? <button
                 style={{
-                    border: "1px solid gray",
-                    borderRadius: "4px",
                     margin: "0",
                     marginLeft: "0.4em",
                     padding: "0.6em",
@@ -1412,6 +1410,8 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
 
     const scrollToViewRef = React.useRef(null);
 
+    const {__} =  props;
+
     const renderProps_Filter: ITableCellProps_Filter =
     {
         __: props.__,
@@ -1961,169 +1961,133 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
     //     </select>
     return (
         <>
-        <div style={{
-            // border: "1px solid red",
-            position: "fixed",
-            // width: "calc(100% - 50px)",
-            zIndex: "101",
-            // position: "absolute",
-            // top: "-5px",
-            // bottom: "0",
-            // left: "0",
-            right: "0",
-            padding: "0",
-            // paddingBottom: "0.1em",
-            margin: "0",
-            marginTop: "-138px",
-            marginRight: "30px",
-            // display: "flex",
-            // flexDirection: "row",
-            // alignItems: "center",
-            // justifyContent: "flex-end",
-            // pointerEvents: "none",
-        }}>
-        <div style={{
-            // pointerEvents: "all",
-            display: "inline-block",
-            fontSize: "90%",
-        }}>
-            {
-            // ${props.__("catalog.opds.info.numberOfItems")}
-            // `(${tableRows.length})`
-            }
-            <CellGlobalFilter
-                    accessibilitySupportEnabled={props.accessibilitySupportEnabled}
-                    preGlobalFilteredRows={tableInstance.preGlobalFilteredRows}
-                    globalFilteredRows={tableInstance.globalFilteredRows}
-                    globalFilter={tableInstance.state.globalFilter}
-                    setGlobalFilter={tableInstance.setGlobalFilter}
-                    __={props.__}
-                    translator={props.translator}
-                    displayType={props.displayType}
-                    focusInputRef={props.focusInputRef}
+        <div>
+            <h2 className={stylesPublication.allBooks_header}>{__("catalog.allBooks")}</h2>
+            <div className={stylesPublication.allBooks_header_navigation}>
+                <CellGlobalFilter
+                        accessibilitySupportEnabled={props.accessibilitySupportEnabled}
+                        preGlobalFilteredRows={tableInstance.preGlobalFilteredRows}
+                        globalFilteredRows={tableInstance.globalFilteredRows}
+                        globalFilter={tableInstance.state.globalFilter}
+                        setGlobalFilter={tableInstance.setGlobalFilter}
+                        __={props.__}
+                        translator={props.translator}
+                        displayType={props.displayType}
+                        focusInputRef={props.focusInputRef}
 
-                    setShowColumnFilters={(show: boolean) => {
-                        const currentShow = showColumnFilters;
-                        setShowColumnFilters(show);
-                        setTimeout(() => {
-                            if (currentShow && !show) {
-                                for (const col of tableInstance.allColumns) {
-                                    tableInstance.setFilter(col.id, "");
+                        setShowColumnFilters={(show: boolean) => {
+                            const currentShow = showColumnFilters;
+                            setShowColumnFilters(show);
+                            setTimeout(() => {
+                                if (currentShow && !show) {
+                                    for (const col of tableInstance.allColumns) {
+                                        tableInstance.setFilter(col.id, "");
+                                    }
                                 }
-                            }
-                        }, 200);
+                            }, 200);
+                        }}
+                    />
+                <div>
+                    <p style={{fontSize: "14px", margin: "0 0 5px 40px"}}>{__("catalog.numberOfPages")}</p>
+                    <div style={{
+                        // pointerEvents: "all",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px"
+                    }}>
+                    <button
+                    style={{
+                        margin:"0",
+                        padding: "0em",
+                        width: "20px",
+                        color: tableInstance.canPreviousPage ? "var(--color-button-primary)" : "gray",
                     }}
-                />
-        </div></div>
-
-        <div style={{
-            // border: "1px solid red",
-            position: "fixed",
-            // width: "calc(100% - 50px)",
-            // zIndex: "9999",
-            // position: "absolute",
-            // top: "-5px",
-            // bottom: "0",
-            // left: "0",
-            right: "0",
-            padding: "0",
-            // paddingBottom: "0.1em",
-            margin: "0",
-            marginTop: "-74px",
-            marginRight: "30px",
-            // display: "flex",
-            // flexDirection: "row",
-            // alignItems: "center",
-            // justifyContent: "flex-end",
-            // pointerEvents: "none",
-        }}>
-            <div style={{
-                // pointerEvents: "all",
-                display: "flex",
-                alignItems: "center",
-            }}>
-            <button
-            style={{
-                margin:"0",
-                padding: "0em",
-                width: "30px",
-                fill: tableInstance.canPreviousPage ? "#333333" : "gray",
-            }}
-            aria-label={`${props.__("opds.firstPage")}`}
-            onClick={() => tableInstance.gotoPage(0)}
-            disabled={!tableInstance.canPreviousPage}>
-                <SVG ariaHidden={true} svg={ArrowFirstIcon} />
-            </button>
-            <button
-            style={{
-                margin:"0",
-                padding: "0",
-                transform: "rotate(180deg)",
-                width: "30px",
-                fill: tableInstance.canPreviousPage ? "#333333" : "gray",
-            }}
-            aria-label={`${props.__("opds.previous")}`}
-            onClick={() => tableInstance.previousPage()}
-            disabled={!tableInstance.canPreviousPage}>
-                <SVG ariaHidden={true} svg={ArrowRightIcon} />
-            </button>
-            <select
-                aria-label={`${props.__("reader.navigation.currentPageTotal", {current: tableInstance.state.pageIndex + 1, total: tableInstance.pageOptions.length})}`}
-                style={{cursor: "pointer", minWidth: "5em", textAlign: "center", padding: "0.2em", margin: "0", marginLeft: "0em", marginRight: "0em", border: "1px solid gray", borderRadius: "4px"}}
-                value={tableInstance.state.pageIndex}
-                onChange={(e) => {
-                    const pageIndex = e.target.value ? Number(e.target.value) : 0;
-                    tableInstance.gotoPage(pageIndex);
-                }}
-            >
-                {
-                ".".repeat(tableInstance.pageOptions.length).split("").map((_s, i) => (
-                    <option
-                        key={`page${i}`}
-                        value={i}>
-                        {i + 1} / {tableInstance.pageOptions.length}
-                    </option>
-                ))
-                }
-            </select>
-            <button
-            style={{
-                margin:"0",
-                padding: "0",
-                width: "30px",
-                fill: tableInstance.canNextPage ? "#333333" : "gray",
-            }}
-            aria-label={`${props.__("opds.next")}`}
-            onClick={() => tableInstance.nextPage()}
-            disabled={!tableInstance.canNextPage}>
-                <SVG ariaHidden={true} svg={ArrowRightIcon} />
-            </button>
-            <button
-            style={{
-                margin:"0",
-                padding: "0em",
-                width: "30px",
-                fill: tableInstance.canNextPage ? "#333333" : "gray",
-            }}
-            aria-label={`${props.__("opds.lastPage")}`}
-            onClick={() => tableInstance.gotoPage(tableInstance.pageCount - 1)}
-            disabled={!tableInstance.canNextPage}>
-                <SVG ariaHidden={true} svg={ArrowLastIcon} />
-            </button>
+                    aria-label={`${props.__("opds.firstPage")}`}
+                    onClick={() => tableInstance.gotoPage(0)}
+                    disabled={!tableInstance.canPreviousPage}>
+                        <SVG ariaHidden={true} svg={ArrowFirstIcon} />
+                    </button>
+                    <button
+                    style={{
+                        margin:"0",
+                        padding: "0",
+                        transform: "rotate(180deg)",
+                        width: "20px",
+                        color: tableInstance.canPreviousPage ? "var(--color-button-primary)" : "gray",
+                    }}
+                    aria-label={`${props.__("opds.previous")}`}
+                    onClick={() => tableInstance.previousPage()}
+                    disabled={!tableInstance.canPreviousPage}>
+                        <SVG ariaHidden={true} svg={ChevronRight} />
+                    </button>
+                    <select
+                        aria-label={`${props.__("reader.navigation.currentPageTotal", {current: tableInstance.state.pageIndex + 1, total: tableInstance.pageOptions.length})}`}
+                        style={{cursor: "pointer", minWidth: "7em", textAlign: "center", padding: "0.2em", margin: "0", marginLeft: "0em", marginRight: "0em", border: "1px solid gray", borderRadius: "4px", height: "30px"}}
+                        value={tableInstance.state.pageIndex}
+                        onChange={(e) => {
+                            const pageIndex = e.target.value ? Number(e.target.value) : 0;
+                            tableInstance.gotoPage(pageIndex);
+                        }}
+                    >
+                        {
+                        ".".repeat(tableInstance.pageOptions.length).split("").map((_s, i) => (
+                            <option
+                                key={`page${i}`}
+                                value={i}>
+                                {i + 1} / {tableInstance.pageOptions.length}
+                            </option>
+                        ))
+                        }
+                    </select>
+                    <button
+                    style={{
+                        margin:"0",
+                        padding: "0",
+                        width: "20px",
+                        color: tableInstance.canNextPage ? "var(--color-button-primary)" : "gray",
+                    }}
+                    aria-label={`${props.__("opds.next")}`}
+                    onClick={() => tableInstance.nextPage()}
+                    disabled={!tableInstance.canNextPage}>
+                        <SVG ariaHidden={true} svg={ChevronRight} />
+                    </button>
+                    <button
+                    style={{
+                        margin:"0",
+                        padding: "0em",
+                        width: "20px",
+                        color: tableInstance.canNextPage ? "var(--color-button-primary)" : "gray",
+                    }}
+                    aria-label={`${props.__("opds.lastPage")}`}
+                    onClick={() => tableInstance.gotoPage(tableInstance.pageCount - 1)}
+                    disabled={!tableInstance.canNextPage}>
+                        <SVG ariaHidden={true} svg={ArrowLastIcon} />
+                    </button>
+                    </div>
+                </div>
             </div>
         </div>
+        {/* TODO! */}
+        {/* {props.displayType === DisplayType.Grid ?
+            <div style={{display: "flex", justifyContent: "space-around", gap: "20px", width: "100%", flexWrap: "wrap",}}>
+        {props.publicationViews.map((pub: any) =>
+            <PublicationCard
+                key={pub.identifier}
+                publicationViewMaybeOpds={pub}
+            />,
+        )}
+        </div> : */}
 
         <div
             style={{
                 overflow: "auto",
-                position: "absolute",
                 top: "0",
                 bottom: "0",
                 left: "0",
                 right: "0",
                 padding: "0",
-                marginLeft: "30px",
-                marginRight: "30px",
+                // marginLeft: "30px",
+                // marginRight: "30px",
                 marginTop: "0em",
                 marginBottom: "0.4em",
             }}>
