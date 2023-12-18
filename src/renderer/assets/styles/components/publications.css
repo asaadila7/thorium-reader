@@ -102,9 +102,11 @@
     width: 20px;
   }
 
-  & .publication_infos {
+  & .publication_title_wrapper {
     flex: 1;
     overflow: hidden;
+    min-height: 30px;
+    width: 100%;
 
     & p {
       margin: 0;
@@ -119,7 +121,7 @@
       line-height: 1.2em;
     }
 
-    & .publication_description {
+    & .publication_authors {
       font-weight: 300;
       overflow-wrap: break-word;
       line-height: 1.2em;
@@ -128,6 +130,21 @@
       text-overflow: ellipsis;
       display: -webkit-box;
       line-clamp: 2;
+    }
+  }
+
+  & .publication_infos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    & span {
+      height: 20px;
+      padding: 0 2px;
+      width: fit-content;
+      min-width: 30px;
+      font-size: 10px;
     }
   }
 }

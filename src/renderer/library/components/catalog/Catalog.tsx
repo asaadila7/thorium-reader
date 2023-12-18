@@ -21,6 +21,7 @@ import { Dispatch } from "redux";
 import CatalogGridView from "./GridView";
 import Header from "./Header";
 import CatalogListView from "./ListView";
+import PublicationAddButton from "./PublicationAddButton";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IBaseProps extends TranslatorProps {
@@ -39,9 +40,7 @@ class Catalog extends React.Component<IProps, undefined> {
     public render(): React.ReactElement<{}> {
         const { __, catalog, tags } = this.props;
 
-        const displayType = (this.props.location?.state && (this.props.location.state as IRouterLocationState).displayType) || DisplayType.Grid;
-
-        const secondaryHeader = <Header/>;
+        const secondaryHeader = <span style={{display: "flex", justifyContent: "end"}}><PublicationAddButton /></span>;
         return (
             <LibraryLayout
                 title={__("header.books")}
@@ -49,17 +48,10 @@ class Catalog extends React.Component<IProps, undefined> {
             >
                 {
                     catalog?.entries
-                    && (
-                        displayType === DisplayType.Grid
-                            ? <CatalogGridView
+                    &&  <CatalogGridView
                                 catalogEntries={catalog.entries}
                                 tags={tags}
                             />
-                            : <CatalogListView
-                                catalogEntries={catalog.entries}
-                                tags={tags}
-                            />
-                    )
                 }
             </LibraryLayout>
         );

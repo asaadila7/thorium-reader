@@ -16,6 +16,7 @@ import { PublicationView } from "readium-desktop/common/views/publication";
 import * as MenuIcon from "readium-desktop/renderer/assets/icons/menu.svg";
 import * as stylesDropDown from "readium-desktop/renderer/assets/styles/components/dropdown.css";
 import * as stylesPublications from "readium-desktop/renderer/assets/styles/components/publications.css";
+import * as stylesButtons from "readium-desktop/renderer/assets/styles/components/buttons.css";
 import Cover from "readium-desktop/renderer/common/components/Cover";
 import {
     TranslatorProps, withTranslator,
@@ -64,29 +65,22 @@ class PublicationCard extends React.Component<IProps> {
         const pubTitleStr = pubTitleLangStr && pubTitleLangStr[1] ? pubTitleLangStr[1] : "";
 
         let pubFormat;
-        // console.log("publicationViewMaybeOpds : ", publicationViewMaybeOpds);
-        // console.log(publicationViewMaybeOpds.isAudio)
-        
+        const pub = (publicationViewMaybeOpds as PublicationView);
 
-        // switch (publicationViewMaybeOpds) {
-        //     case isAudio: 
-        //         pubFormat = "Audio";
-        //         break
-        //     case isDivina: 
-        //         pubFormat = "Divina";
-        //         break
-        //     case isPdf: 
-        //         pubFormat = "PDF";
-        //         break
-        //     case isDaisy: 
-        //         pubFormat = "DAISY";
-        //         break
-        //     case isFXL: 
-        //         pubFormat = "EPUB";
-        //         break
-        //     default : 
-        //     pubFormat = "EPUB";
-        // }
+        if (pub.isAudio) {
+            pubFormat = "AUDIO";
+        } else if (pub.isDivina) {
+            pubFormat = "DIVINA";
+        } else if (pub.isPDF) {
+            pubFormat = "PDF";
+        } else if (pub.isDaisy) {
+            pubFormat = "DAISY";
+        } else if (pub.isFXL) {
+            pubFormat = "EPUB";
+        } else {
+            pubFormat = "EPUB";
+        }
+    
 
         // aria-haspopup="dialog"
         // aria-controls="dialog"
@@ -106,17 +100,18 @@ class PublicationCard extends React.Component<IProps> {
                 </a>
                 <div className={stylesPublications.publication_infos_wrapper}>
                     <a aria-hidden onClick={(e) => this.handleBookClick(e)}
-                        className={stylesPublications.publication_infos}
+                        className={stylesPublications.publication_title_wrapper}
                         >
                         <p aria-hidden className={stylesPublications.publication_title}
                             dir={pubTitleIsRTL ? "rtl" : undefined}>
                             {pubTitleStr}
                         </p>
-                        <p aria-hidden className={stylesPublications.publication_description}>
+                        <p aria-hidden className={stylesPublications.publication_authors}>
                             {this.truncateAuthors(authors)}
                         </p>
                     </a>
-                    <div>
+                    <div className={stylesPublications.publication_infos}>
+                    <span className={stylesButtons.button_secondary_blue}>{pubFormat}</span>
                         <Menu
                             button={(
                                 <SVG title={`${__("accessibility.bookMenu")} (${publicationViewMaybeOpds.documentTitle})`} svg={MenuIcon} />
@@ -134,7 +129,6 @@ class PublicationCard extends React.Component<IProps> {
                             )}
                             dir="right"
                         />
-
                     </div>
                 </div>
             </div>
