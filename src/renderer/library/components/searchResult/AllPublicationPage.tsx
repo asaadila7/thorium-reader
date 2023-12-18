@@ -17,6 +17,10 @@ import SVG from "readium-desktop/renderer/common/components/SVG";
 // import * as SearchIcon from "readium-desktop/renderer/assets/icons/baseline-search-24px-grey.svg";
 import * as stylesPublication from "readium-desktop/renderer/assets/styles/components/allPublicationsPage.scss";
 import * as stylesInput from "readium-desktop/renderer/assets/styles/components/inputs.css";
+import * as stylesPublications from "readium-desktop/renderer/assets/styles/components/publications.css";
+import * as stylesButtons from "readium-desktop/renderer/assets/styles/components/buttons.css";
+import * as stylesDropDown from "readium-desktop/renderer/assets/styles/components/dropdown.css";
+import * as MenuIcon from "readium-desktop/renderer/assets/icons/menu.svg";
 import * as magnifyingGlass from "readium-desktop/renderer/assets/icons/magnifying_glass.svg";
 import * as ArrowRightIcon from "readium-desktop/renderer/assets/icons/baseline-play_arrow-24px.svg"; // baseline-arrow_forward_ios-24px -- arrow
 // import * as ArrowLeftIcon from "readium-desktop/renderer/assets/icons/baseline-arrow_left_ios-24px.svg";
@@ -82,8 +86,15 @@ import {
     ensureKeyboardListenerIsInstalled, registerKeyboardListener, unregisterKeyboardListener,
 } from "readium-desktop/renderer/common/keyboard";
 import { ipcRenderer } from "electron";
-import CatalogGridView from "readium-desktop/renderer/library/components/catalog/GridView"
 import PublicationCard from "../publication/PublicationCard";
+import Cover from "readium-desktop/renderer/common/components/Cover";
+import Menu from "readium-desktop/renderer/common/components/menu/Menu";
+import classNames from "classnames";
+import OpdsMenu from "../publication/menu/OpdsMenu";
+import CatalogMenu from "../publication/menu/CatalogMenu";
+import { TPublication } from "readium-desktop/common/type/publication.type";
+import AboutThoriumButton from "../catalog/AboutThoriumButton";
+import { id } from "inversify";
 
 // import {
 //     formatContributorToString,
@@ -1959,6 +1970,9 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
     //         </option>
     //     ))}
     //     </select>
+
+
+
     return (
         <>
         <div>
@@ -2067,17 +2081,18 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                 </div>
             </div>
         </div>
-        {/* TODO! */}
-        {/* {props.displayType === DisplayType.Grid ?
-            <div style={{display: "flex", justifyContent: "space-around", gap: "20px", width: "100%", flexWrap: "wrap",}}>
-        {props.publicationViews.map((pub: any) =>
-            <PublicationCard
-                key={pub.identifier}
-                publicationViewMaybeOpds={pub}
-            />,
-        )}
+        {/* TODO!
+        {props.displayType === DisplayType.Grid ?
+            <div style={{display: "flex", justifyContent: "space-around", gap: "20px", width: "100%", flexWrap: "wrap",}}{...tableInstance.getTableBodyProps()}>
+                {props.publicationViews.map((pub) => {
+                return (
+                    <PublicationCard
+                    key={pub.identifier}
+                    publicationViewMaybeOpds={pub}
+                />
+                )
+            })}
         </div> : */}
-
         <div
             style={{
                 overflow: "auto",
@@ -2097,7 +2112,6 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
         <table {...tableInstance.getTableProps()}
             style={{
                 fontSize: "90%",
-                border: "solid 1px gray",
                 borderRadius: "8px",
                 padding: "4px",
                 margin: "0",
@@ -2105,7 +2119,10 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                 borderSpacing: "0",
                 // minWidth: "calc(100% - 30px)",
                 width: "100%",
+                display : props.displayType === DisplayType.Grid ? "flex" : "table"
             }}>
+            {props.displayType === DisplayType.Grid ? "" 
+            : 
             <thead>{tableInstance.headerGroups.map((headerGroup, index) =>
                 (<tr key={`headtr_${index}`} {...headerGroup.getHeaderGroupProps()}>{
                 headerGroup.headers.map((col, i) => {
@@ -2248,35 +2265,55 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
             // </tr>
             }
 
-            </thead>
-            <tbody {...tableInstance.getTableBodyProps()}>{tableInstance.page.map((row, index) => {
-                tableInstance.prepareRow(row);
+            </thead>}
+            <tbody {...tableInstance.getTableBodyProps()} 
+            style={{
+                width: "100%",
+                display : props.displayType === DisplayType.Grid ? "flex" : "",
+                justifyContent: "space-evenly",
+                flexWrap: "wrap",
+                gap: "10px",
+                marginBottom: "20px",
+                backgroundColor: "white"
+             }}
+                >
+                {tableInstance.page.map((row, index) => {
+                const id = parseInt(row.id, 10);
 
-                return (<tr key={`bodytr_${index}`} {...row.getRowProps()}
-                style={{
-                    // outlineColor: "#cccccc",
-                    // outlineOffset: "0px",
-                    // outlineStyle: "solid",
-                    // outlineWidth: "1px",
-                    backgroundColor: index % 2 ? "#efefef" : undefined,
-                }}>{row.cells.map((cell, i) =>
-                    {
-                        return (<td key={`bodytrtd_${i}`} {...cell.getCellProps()}
+                tableInstance.prepareRow(row);
+                    return(
+                        props.displayType === DisplayType.Grid ? 
+                        <tr>
+                            <PublicationCard publicationViewMaybeOpds={props.publicationViews[id]} key={index} />  
+                        </tr>
+                        :
+
+                        <tr key={`bodytr_${index}`} {...row.getRowProps()}
                         style={{
-                            padding: "0",
-                            margin: "0",
-                            // border: "solid 1px #eeeeee",
-                        }}
-                        >{
-                            cell.render("Cell", renderProps_Cell)
-                        }</td>);
-                    },
-                    )}
-                    </tr>
-                );
+                            // outlineColor: "#cccccc",
+                            // outlineOffset: "0px",
+                            // outlineStyle: "solid",
+                            // outlineWidth: "1px",
+                            backgroundColor: index % 2 ? "#efefef" : undefined,
+                        }}>{row.cells.map((cell, i) =>
+                            {
+                                return (<td key={`bodytrtd_${i}`} {...cell.getCellProps()}
+                                style={{
+                                    padding: "0",
+                                    margin: "0",
+                                    // border: "solid 1px #eeeeee",
+                                }}
+                                >{
+                                    cell.render("Cell", renderProps_Cell)
+                                }</td>);
+                            },
+                        )}
+                        </tr>
+                    );
             })}</tbody>
         </table>
         </div>
+        <AboutThoriumButton />
         </>
     );
 };

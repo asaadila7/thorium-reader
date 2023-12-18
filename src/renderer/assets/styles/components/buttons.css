@@ -330,28 +330,6 @@ button {
 }
 
 .button_nav_primary {
-  border: 1px solid var(--color-primary);
-  height: 20px;
-  border-radius: 4px;
-  padding: 5px;
-  min-width: 100px;
-  background-color: var(--color-light-grey);
-  color: var(--color-primary);
-  transition: 200ms linear;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-decoration: none;
-
-  svg {
-    width: 15px;
-    height: 15px;
-    fill: var(--color-primary);
-  }
-}
-
-.button_nav_secondary {
   border: 1px solid var(--color-button-primary);
   height: 20px;
   border-radius: 4px;
@@ -365,11 +343,35 @@ button {
   text-decoration: none;
   width: fit-content;
   cursor: pointer;
+  gap: 5px;
 
   svg {
     width: 15px;
     height: 15px;
     fill: var(--color-button-primary);
+  }
+}
+
+.button_nav_secondary {
+  border: 1px solid transparent;
+  height: 20px;
+  border-radius: 4px;
+  padding: 5px;
+  min-width: 100px;
+  background-color: transparent;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: fit-content;
+  cursor: pointer;
+  gap: 5px;
+
+  svg {
+    width: 15px;
+    height: 15px;
+    fill: var(--color-primary);
   }
 
   input {

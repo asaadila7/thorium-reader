@@ -164,7 +164,8 @@ section {
 
 .main {
   width: calc(100% - 120px);
-  padding: 30px 60px;
+  padding: 30px;
+  padding-right: 60px;
   overflow-y: auto;
   bottom: 0;
   left: 0;
