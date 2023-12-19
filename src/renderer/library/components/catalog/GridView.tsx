@@ -86,8 +86,8 @@ const EntrySection = ({entry, entryIndex}: {entry: CatalogEntryView, entryIndex:
             }
 
         </section>
-    )
-}
+    );
+};
 
 class CatalogGridView extends React.Component<IProps, IState> {
 
@@ -120,7 +120,6 @@ class CatalogGridView extends React.Component<IProps, IState> {
         const catalogEntriesIsEmpty = this.props.catalogEntries.filter(
             (entry) => entry.totalCount > 0,
         ).length === 0;
-        
 
         return (
             <>

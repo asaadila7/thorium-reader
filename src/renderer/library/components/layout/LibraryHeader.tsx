@@ -44,7 +44,7 @@ const headerNav: NavigationHeader[] = [
         label: "allBooks",
         matchRoutes: ["/library/search/all"],
         styles: [],
-        svg: ShelfIcon
+        svg: ShelfIcon,
     },
     {
         route: "/opds",

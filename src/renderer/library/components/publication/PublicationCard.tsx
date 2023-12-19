@@ -80,7 +80,6 @@ class PublicationCard extends React.Component<IProps> {
         } else {
             pubFormat = "EPUB";
         }
-    
 
         // aria-haspopup="dialog"
         // aria-controls="dialog"

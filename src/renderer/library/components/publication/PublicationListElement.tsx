@@ -89,22 +89,22 @@ export class PublicationListElement extends React.Component<IProps> {
 
             let formatedPubFormat = "";
         switch (true) {
-            case pub.isAudio: 
+            case pub.isAudio:
                 formatedPubFormat = "Audio";
-                break
-            case pub.isDivina: 
+                break;
+            case pub.isDivina:
                 formatedPubFormat = "Divina";
-                break
-            case pub.isPDF: 
+                break;
+            case pub.isPDF:
                 formatedPubFormat = "PDF";
-                break
-            case pub.isDaisy: 
+                break;
+            case pub.isDaisy:
                 formatedPubFormat = "DAISY";
-                break
-            case pub.isFXL: 
+                break;
+            case pub.isFXL:
                 formatedPubFormat = "EPUB";
-                break
-            default : 
+                break;
+            default :
             formatedPubFormat = "EPUB";
         }
 
@@ -112,7 +112,7 @@ export class PublicationListElement extends React.Component<IProps> {
                 <p>{formatedPublishedYear}</p>
                 <p>{formatedPublishers}</p>
                 <p className={stylesButtons.button_format}>{formatedPubFormat}</p>
-                <p>"PROGRESSION"</p>
+                <p>PROGRESSION</p>
             </div>;
         }
 

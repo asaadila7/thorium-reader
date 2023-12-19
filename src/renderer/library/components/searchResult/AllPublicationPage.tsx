@@ -1052,7 +1052,7 @@ const CellTitle: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell &
     const pubTitleStr = pubTitleLangStr && pubTitleLangStr[1] ? pubTitleLangStr[1] : "";
 
     return (<div style={{
-        ...commonCellStyles(props)
+        ...commonCellStyles(props),
         // minWidth: props.displayType === DisplayType.Grid ? "200px" : undefined,
         // maxWidth: props.displayType === DisplayType.Grid ? "300px" : undefined,
         // width: props.displayType === DisplayType.Grid ? "250px" : undefined,
@@ -1806,10 +1806,10 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
         <table {...tableInstance.getTableProps()}
             className={stylesPublication.allBook_table}
             style={{
-                display : props.displayType === DisplayType.Grid ? "flex" : "table"
+                display : props.displayType === DisplayType.Grid ? "flex" : "table",
             }}>
-            {props.displayType === DisplayType.Grid ? "" 
-            : 
+            {props.displayType === DisplayType.Grid ? ""
+            :
             <thead>{tableInstance.headerGroups.map((headerGroup, index) =>
                 (<tr key={`headtr_${index}`} {...headerGroup.getHeaderGroupProps()}>{
                 headerGroup.headers.map((col, i) => {
@@ -1943,18 +1943,18 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
             }
 
             </thead>}
-            <tbody {...tableInstance.getTableBodyProps()} 
+            <tbody {...tableInstance.getTableBodyProps()}
             className={stylesPublication.allBook_table_body}
             style={{
                 display : props.displayType === DisplayType.Grid ? "flex" : "",
-             }}
+            }}
                 >
                 {tableInstance.page.map((row, index) => {
                 const id = parseInt(row.id, 10);
 
                 tableInstance.prepareRow(row);
                     return(
-                        props.displayType === DisplayType.Grid ? 
+                        props.displayType === DisplayType.Grid ?
                         <tr key={index}>
                             <td><PublicationCard publicationViewMaybeOpds={props.publicationViews[id]} /></td>
                         </tr>
