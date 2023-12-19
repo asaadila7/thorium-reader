@@ -81,8 +81,12 @@ class PublicationCard extends React.Component<IProps> {
             pubFormat = "EPUB";
         }
 
+        const progressionInAsset = (pub.lastReadingLocation?.locator?.locations?.progression * 100).toFixed(0);
+
         // aria-haspopup="dialog"
         // aria-controls="dialog"
+
+        console.log(publicationViewMaybeOpds)
         return (
             <div className={stylesPublications.publication_wrapper}>
                 <a
@@ -111,6 +115,11 @@ class PublicationCard extends React.Component<IProps> {
                     </a>
                     <div className={stylesPublications.publication_infos}>
                     <span className={stylesButtons.button_secondary_blue}>{pubFormat}</span>
+                    {progressionInAsset != "NaN" ? 
+                    <span>
+                        {progressionInAsset}%
+                    </span> 
+                    : <></> }
                         <Menu
                             button={(
                                 <SVG title={`${__("accessibility.bookMenu")} (${publicationViewMaybeOpds.documentTitle})`} svg={MenuIcon} />

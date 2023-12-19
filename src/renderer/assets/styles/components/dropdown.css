@@ -20,11 +20,11 @@
   width: 180px;
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: var(--color-button-secondary);
   font-size: 0.9rem;
   box-shadow: 0 0 10px 0 var(--color-medium-grey);
   border-width: 1px;
-  border-color: var(--color-primary);
+  border-color: var(--color-button-primary);
   border-style: solid;
   border-radius: 5px;
   margin-top: 20px;
@@ -39,7 +39,7 @@
     height: 0;
     border-style: solid;
     border-width: 0 7.5px 10px 7.5px;
-    border-color: transparent transparent var(--color-primary) transparent;
+    border-color: transparent transparent var(--color-button-primary) transparent;
   }
 
   &.dropdown_right::after {
@@ -54,7 +54,7 @@
 
   & > * {
     text-decoration: none;
-    color: black;
+    color: var(--color-button-primary);
     padding: 0.7rem;
     text-align: center;
     cursor: pointer;
