@@ -88,33 +88,35 @@ class Header extends React.Component<IProps, undefined> {
                         <h3>{__("header.listTitle")}</h3>
                     </Link>
                 </div>
-                {
-                    window.location.hash.indexOf("search") === -1
-                    ?
                     <div style={{textAlign: "right", display: "flex", gap: "10px"}}>
                     <PublicationAddButton />
-                    <SearchForm />
-                    <Link
-                        style={{fontWeight: "bold"}}
-                        className={stylesButtons.button_nav_secondary}
-                        to={{
-                            ...this.props.location,
-                            pathname: "/library/search/all",
-                        }}
-                        state = {{displayType: (this.props.location.state && (this.props.location.state as IRouterLocationState).displayType) ? (this.props.location.state as IRouterLocationState).displayType : DisplayType.Grid}}
-                        title={`${this.props.__("header.searchPlaceholder")} (${this.props.__("header.allBooks")})`}
-                    >
-                        {
-                        <>
-                        <SVG ariaHidden={true} svg={magnifyingGlass} />
-                        <h3>{this.props.__("header.searchPlaceholder")}</h3>
-                        </>
-                        }
-                    </Link>
-                    </div>
+                    {
+                    window.location.hash.indexOf("search") === -1
+                    ?
+                    <>
+                        <SearchForm />
+                        <Link
+                            style={{fontWeight: "bold"}}
+                            className={stylesButtons.button_nav_secondary}
+                            to={{
+                                ...this.props.location,
+                                pathname: "/library/search/all",
+                            }}
+                            state = {{displayType: (this.props.location.state && (this.props.location.state as IRouterLocationState).displayType) ? (this.props.location.state as IRouterLocationState).displayType : DisplayType.Grid}}
+                            title={`${this.props.__("header.searchPlaceholder")} (${this.props.__("header.allBooks")})`}
+                        >
+                            {
+                            <>
+                            <SVG ariaHidden={true} svg={magnifyingGlass} />
+                            <h3>{this.props.__("header.searchPlaceholder")}</h3>
+                            </>
+                            }
+                        </Link>
+                    </>
                     :
                     <></>
-                }
+                    }
+                    </div>
             </SecondaryHeader>
         );
     }

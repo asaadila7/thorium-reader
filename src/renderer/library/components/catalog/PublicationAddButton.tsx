@@ -5,7 +5,6 @@
 // that can be found in the LICENSE file exposed on Github (readium) in the project repository.
 // ==LICENSE-END==
 
-import classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
 import { acceptedExtensionArray, acceptedExtensionObject } from "readium-desktop/common/extension";
@@ -44,7 +43,7 @@ export class PublicationAddButton extends React.Component<IProps, undefined> {
         // htmlFor="epubInput"
         return (
             <label
-                className={stylesButtons.button_nav_secondary}
+                className={stylesButtons.button_nav_primary}
             >
                 <SVG ariaHidden={true} svg={PlusIcon} title={__("header.importTitle")} />
                 <h3>{__("header.importTitle")}</h3>

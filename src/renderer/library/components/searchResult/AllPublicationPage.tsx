@@ -17,12 +17,8 @@ import SVG from "readium-desktop/renderer/common/components/SVG";
 // import * as SearchIcon from "readium-desktop/renderer/assets/icons/baseline-search-24px-grey.svg";
 import * as stylesPublication from "readium-desktop/renderer/assets/styles/components/allPublicationsPage.scss";
 import * as stylesInput from "readium-desktop/renderer/assets/styles/components/inputs.css";
-import * as stylesPublications from "readium-desktop/renderer/assets/styles/components/publications.css";
 import * as stylesButtons from "readium-desktop/renderer/assets/styles/components/buttons.css";
-import * as stylesDropDown from "readium-desktop/renderer/assets/styles/components/dropdown.css";
-import * as MenuIcon from "readium-desktop/renderer/assets/icons/menu.svg";
 import * as magnifyingGlass from "readium-desktop/renderer/assets/icons/magnifying_glass.svg";
-import * as ArrowRightIcon from "readium-desktop/renderer/assets/icons/baseline-play_arrow-24px.svg"; // baseline-arrow_forward_ios-24px -- arrow
 // import * as ArrowLeftIcon from "readium-desktop/renderer/assets/icons/baseline-arrow_left_ios-24px.svg";
 import * as ArrowLastIcon from "readium-desktop/renderer/assets/icons/arrowLast-icon.svg";
 import * as SearchIcon from "readium-desktop/renderer/assets/icons/search-icon.svg";
@@ -73,7 +69,6 @@ import {
 } from "readium-desktop/renderer/common/components/hoc/translator";
 import { apiAction } from "readium-desktop/renderer/library/apiAction";
 import { apiSubscribe } from "readium-desktop/renderer/library/apiSubscribe";
-import BreadCrumb from "readium-desktop/renderer/library/components/layout/BreadCrumb";
 import LibraryLayout from "readium-desktop/renderer/library/components/layout/LibraryLayout";
 import { ILibraryRootState } from "readium-desktop/common/redux/states/renderer/libraryRootState";
 import { Unsubscribe } from "redux";
@@ -87,14 +82,8 @@ import {
 } from "readium-desktop/renderer/common/keyboard";
 import { ipcRenderer } from "electron";
 import PublicationCard from "../publication/PublicationCard";
-import Cover from "readium-desktop/renderer/common/components/Cover";
-import Menu from "readium-desktop/renderer/common/components/menu/Menu";
-import classNames from "classnames";
-import OpdsMenu from "../publication/menu/OpdsMenu";
-import CatalogMenu from "../publication/menu/CatalogMenu";
-import { TPublication } from "readium-desktop/common/type/publication.type";
 import AboutThoriumButton from "../catalog/AboutThoriumButton";
-import { id } from "inversify";
+import classNames from "classnames";
 
 // import {
 //     formatContributorToString,
@@ -199,7 +188,7 @@ export class AllPublicationPage extends React.Component<IProps, IState> {
         const title = __("catalog.allBooks");
 
         const secondaryHeader = <Header />;
-        const breadCrumb = <BreadCrumb breadcrumb={[{ name: __("catalog.myBooks"), path: "/library" }, { name: title }]}/>;
+        // const breadCrumb = <BreadCrumb breadcrumb={[{ name: __("catalog.myBooks"), path: "/library" }, { name: title }]}/>;
 
         return (
             <LibraryLayout
@@ -332,7 +321,7 @@ const commonCellStyles =  (props: ITableCellProps_Column & ITableCellProps_Gener
 
         padding: "0.4em",
         overflowY: "auto",
-        textAlign: "center",
+        textAlign: "left",
         userSelect: "text",
     };
 };
@@ -373,17 +362,13 @@ const CellGlobalFilter: React.FC<ITableCellProps_GlobalFilter> = (props) => {
     // className={classNames(classStyleExample)}
 
     return (
-        <div className={stylesInput.form_group} style={{backgroundColor: "white", width: "370px", height: "30px"}}>
+        <div className={stylesInput.form_group}>
             <label
                 id="globalSearchLabel"
-                htmlFor="globalSearchInput"
-                style={{
-                    backgroundColor: "var(--color-figma-grey)",
-                    top: "-19px"
-                }}>
+                htmlFor="globalSearchInput">
                 {`${props.__("header.searchPlaceholder")}`}
             </label>
-            <i style={{position: "relative", width: "25px", height: "25px", margin: "auto"}}><SVG ariaHidden svg={SearchIcon} /></i>
+            <i><SVG ariaHidden svg={SearchIcon} /></i>
             {/*
             value={value || ""}
             */}
@@ -407,32 +392,12 @@ const CellGlobalFilter: React.FC<ITableCellProps_GlobalFilter> = (props) => {
                     }
                 }}
                 placeholder={`${props.__("header.searchTitle")}`}
-                style={{
-                    margin: "0",
-                    marginLeft: "0.4em",
-                    width: "100%",
-                    padding: "0.2em",
-                    height: "30px"
-                }}
                 />
                 <div
-                    aria-live="assertive"
-                    style={{
-                        // border: "1px solid red",
-                        marginLeft: "0.4em",
-                        display: "inline-block",
-                        // width: "4em",
-                        overflow: "visible",
-                        whiteSpace: "nowrap",
-                    }}>
+                    aria-live="assertive">
                 {props.globalFilteredRows.length !== props.preGlobalFilteredRows.length ? ` (${props.globalFilteredRows.length} / ${props.preGlobalFilteredRows.length})` : ` (${props.preGlobalFilteredRows.length})`}
             </div>
             {props.accessibilitySupportEnabled ? <button
-                style={{
-                    margin: "0",
-                    marginLeft: "0.4em",
-                    padding: "0.6em",
-                }}
                 onClick={() => {
                     props.setShowColumnFilters(false);
                     props.setGlobalFilter( // value
@@ -505,10 +470,7 @@ const CellColumnFilter: React.FC<ITableCellProps_Filter & ITableCellProps_Column
     }, 500);
 
     return props.showColumnFilters ?
-    <div style={{
-        display: "flex",
-        alignItems: "center",
-    }}>
+    <div className={stylesPublication.showColFilters_wrapper}>
         {
             /*
         value={ // props.column.filterValue
@@ -535,27 +497,14 @@ const CellColumnFilter: React.FC<ITableCellProps_Filter & ITableCellProps_Column
         }}
         aria-label={`${props.__("header.searchPlaceholder")} (${props.column.Header})`}
         placeholder={`${props.__("header.searchPlaceholder")} (${props.column.Header})`}
+        className={stylesPublication.showColFilters_input}
         style={{
-            border: "1px solid gray",
-            borderRadius: "4px",
-            margin: "0",
             width: props.accessibilitySupportEnabled ? "calc(100% - 30px)" : "100%",
-            padding: "0.2em",
-            backgroundColor: "white",
         }}
     />
     {
     props.accessibilitySupportEnabled ? <button
         aria-label={`${props.__("header.searchPlaceholder")}`}
-        style={{
-            border: "1px solid gray",
-            borderRadius: "4px",
-            margin: "0",
-            marginLeft: "0.4em",
-            width: "24px",
-            height: "24px",
-            padding: "0.2em",
-        }}
         onClick={() => {
             // value
             props.column.setFilter( // props.column.filterValue
@@ -580,15 +529,8 @@ interface ITableCellProps_Value_Cover {
     value: IColumnValue_Cover;
 }
 const CellCoverImage: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell & ITableCellProps_Value_Cover> = (props) => {
-    return (<div style={{
-        padding: "0",
-        margin: "0",
-        textAlign: "center",
-    }}>
+    return (<div className={stylesPublication.cell_coverImg}>
         <a
-            style={{
-                cursor: "pointer",
-            }}
             tabIndex={0}
             onClick={(e) => {
                 e.preventDefault();
@@ -618,19 +560,7 @@ const CellCoverImage: React.FC<ITableCellProps_Column & ITableCellProps_GenericC
                 "data:image/png;base64,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"
             }
             alt={""}
-            role="presentation"
-            style={{
-
-            objectFit: "contain",
-            width: "100%",
-            height: "100%",
-
-            // minHeight: props.displayType === DisplayType.Grid ? "150px" : "80px",
-            // maxHeight: props.displayType === DisplayType.Grid ? "150px" : "50px",
-
-            // minWidth: props.displayType === DisplayType.Grid ? "150px" : "100px",
-            // maxWidth: props.displayType === DisplayType.Grid ? "150px" : "50px",
-        }} />
+            role="presentation"/>
         </a>
     </div>);
 };
@@ -652,36 +582,10 @@ const CellFormat: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell 
                 // props.column.setFilter(t);
                 props.setShowColumnFilters(true, props.column.id, t);
             }}
-            style={{
-                display: "flex",
-                alignItems: "center",
-                textAlign: "center",
-                padding: "2px 6px",
-                fontSize: "1rem",
-                // backgroundColor: "#e7f1fb",
-                // borderRadius: "5px",
-                // border: "1px solid var(--color-tertiary)",
-                // color: "var(--color-tertiary)",
-                cursor: "pointer",
-                // textDecoration: "none",
-                textDecoration: "underline",
-                textDecorationColor: "var(--color-tertiary)",
-                textDecorationSkip: "ink",
-                marginRight: "6px",
-                marginBottom: "6px",
-        }}>{t}</a>;
+            className={stylesButtons.button_nav_primary} style={{height: "15px", padding: "2px"}}>{t}</a>;
     };
 
-    const flexStyle: React.CSSProperties = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        paddingTop: "0.2em",
-    };
-
-    return (<div style={{...flexStyle}}>
+    return (<div className={stylesPublication.cell_wrapper}>
         {
         link(props.value)
         }
@@ -711,62 +615,25 @@ const CellLangs: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell &
                 // props.column.setFilter(t);
                 props.setShowColumnFilters(true, props.column.id, t);
             }}
-            style={{
-                display: "flex",
-                alignItems: "center",
-                textAlign: "center",
-                padding: "2px 6px",
-                fontSize: "1rem",
-                // backgroundColor: "#e7f1fb",
-                // borderRadius: "5px",
-                // border: "1px solid var(--color-tertiary)",
-                // color: "var(--color-tertiary)",
-                cursor: "pointer",
-                // textDecoration: "none",
-                textDecoration: "underline",
-                textDecorationColor: "var(--color-tertiary)",
-                textDecorationSkip: "ink",
-                marginRight: "6px",
-                marginBottom: "6px",
-        }}>{t}</a>;
+            className={stylesPublication.cell_link}>{t}</a>;
     };
 
     // props.value.label === props.value.tags.join(", ")
 
-    const flexStyle: React.CSSProperties = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        paddingTop: "0.2em",
-    };
-
     return props.value.langs?.length ?
     (
     props.value.langs.length === 1 ? (
-        <div style={{...flexStyle}}>
+        <div className={stylesPublication.cell_wrapper}>
         {
         link(props.value.langs[0])
         }
         </div>
     ) : (
-        <ul style={{
-            listStyleType: "none",
-            margin: "0",
-            padding: "0",
-            ...flexStyle,
-        }}>
+        <ul className={classNames(stylesPublication.cell_wrapper, stylesPublication.cell_multi_langs)}>
         {
         props.value.langs.map((t, i) => {
             return <li
                 key={`k${i}`}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    margin: "0",
-                    padding: "0",
-                }}
             >{link(t)}</li>;
         })
         }
@@ -798,62 +665,25 @@ const CellPublishers: React.FC<ITableCellProps_Column & ITableCellProps_GenericC
                 // props.column.setFilter(t);
                 props.setShowColumnFilters(true, props.column.id, t);
             }}
-            style={{
-                display: "flex",
-                alignItems: "center",
-                textAlign: "center",
-                padding: "2px 6px",
-                fontSize: "1rem",
-                // backgroundColor: "#e7f1fb",
-                // borderRadius: "5px",
-                // border: "1px solid var(--color-tertiary)",
-                // color: "var(--color-tertiary)",
-                cursor: "pointer",
-                // textDecoration: "none",
-                textDecoration: "underline",
-                textDecorationColor: "var(--color-tertiary)",
-                textDecorationSkip: "ink",
-                marginRight: "6px",
-                marginBottom: "6px",
-        }}>{t}</a>;
+            className={stylesPublication.cell_link}>{t}</a>;
     };
 
     // props.value.label === props.value.tags.join(", ")
 
-    const flexStyle: React.CSSProperties = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        paddingTop: "0.2em",
-    };
-
     return props.value.publishers?.length ?
     (
     props.value.publishers.length === 1 ? (
-        <div style={{...flexStyle}}>
+        <div className={stylesPublication.cell_wrapper}>
         {
         link(props.value.publishers[0])
         }
         </div>
     ) : (
-        <ul style={{
-            listStyleType: "none",
-            margin: "0",
-            padding: "0",
-            ...flexStyle,
-        }}>
+        <ul className={classNames(stylesPublication.cell_wrapper, stylesPublication.cell_multi_langs)}>
         {
         props.value.publishers.map((t, i) => {
             return <li
                 key={`k${i}`}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    margin: "0",
-                    padding: "0",
-                }}
             >{link(t)}</li>;
         })
         }
@@ -885,36 +715,10 @@ const CellAuthors: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell
                 // props.column.setFilter(t);
                 props.setShowColumnFilters(true, props.column.id, t);
             }}
-            style={{
-                display: "flex",
-                alignItems: "center",
-                textAlign: "center",
-                padding: "2px 6px",
-                fontSize: "1rem",
-                // backgroundColor: "#e7f1fb",
-                // borderRadius: "5px",
-                // border: "1px solid var(--color-tertiary)",
-                // color: "var(--color-tertiary)",
-                cursor: "pointer",
-                // textDecoration: "none",
-                textDecoration: "underline",
-                textDecorationColor: "var(--color-tertiary)",
-                textDecorationSkip: "ink",
-                marginRight: "6px",
-                marginBottom: "6px",
-        }}>{t}</a>;
+            className={stylesPublication.cell_link}>{t}</a>;
     };
 
     // props.value.label === props.value.tags.join(", ")
-
-    const flexStyle: React.CSSProperties = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        paddingTop: "0.2em",
-    };
 
     return props.value.authors?.length ?
     (
@@ -926,28 +730,17 @@ const CellAuthors: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell
         }}>
         {
     props.value.authors.length === 1 ? (
-        <div style={{...flexStyle}}>
+        <div className={stylesPublication.cell_wrapper}>
         {
         link(props.value.authors[0])
         }
         </div>
     ) : (
-        <ul style={{
-            listStyleType: "none",
-            margin: "0",
-            padding: "0",
-            ...flexStyle,
-        }}>
+        <ul className={classNames(stylesPublication.cell_wrapper, stylesPublication.cell_multi_langs)}>
         {
         props.value.authors.map((t, i) => {
             return <li
                 key={`k${i}`}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    margin: "0",
-                    padding: "0",
-                }}
             >{link(t)}</li>;
         })
         }
@@ -985,59 +778,25 @@ const CellTags: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell & 
                 // props.column.setFilter(t);
                 props.setShowColumnFilters(true, props.column.id, t);
             }}
-            style={{
-            display: "flex",
-            alignItems: "center",
-            textAlign: "center",
-            backgroundColor: "#e7f1fb",
-            padding: "2px 6px",
-            fontSize: "1rem",
-            borderRadius: "5px",
-            border: "1px solid var(--color-tertiary)",
-            color: "var(--color-tertiary)",
-            cursor: "pointer",
-            textDecoration: "none",
-            marginRight: "6px",
-            marginBottom: "6px",
-        }}>{t}</a>;
+            className={stylesButtons.button_nav_primary} style={{height: "15px", padding: "2px"}}>{t}</a>;
     };
 
     // props.value.label === props.value.tags.join(", ")
 
-    const flexStyle: React.CSSProperties = {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "flex-start",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        paddingTop: "0.2em",
-    };
-
     return props.value.tags?.length ?
     (
     props.value.tags.length === 1 ? (
-        <div style={{...flexStyle}}>
+        <div className={stylesPublication.cell_wrapper}>
         {
         link(props.value.tags[0])
         }
         </div>
     ) : (
-        <ul style={{
-            listStyleType: "none",
-            margin: "0",
-            padding: "0",
-            ...flexStyle,
-        }}>
+        <ul className={classNames(stylesPublication.cell_wrapper, stylesPublication.cell_multi_langs)}>
         {
         props.value.tags.map((t, i) => {
             return <li
                 key={`k${i}`}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    margin: "0",
-                    padding: "0",
-                }}
             >{link(t)}</li>;
         })
         }
@@ -1270,24 +1029,7 @@ const CellDate: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell & 
                 // props.column.setFilter(t);
                 props.setShowColumnFilters(true, props.column.id, t);
             }}
-            style={{
-                display: "flex",
-                alignItems: "center",
-                textAlign: "center",
-                padding: "2px 6px",
-                fontSize: "1rem",
-                // backgroundColor: "#e7f1fb",
-                // borderRadius: "5px",
-                // border: "1px solid var(--color-tertiary)",
-                // color: "var(--color-tertiary)",
-                cursor: "pointer",
-                // textDecoration: "none",
-                textDecoration: "underline",
-                textDecorationColor: "var(--color-tertiary)",
-                textDecorationSkip: "ink",
-                marginRight: "6px",
-                marginBottom: "6px",
-        }}>{props.value.date}</a>
+            className={stylesPublication.cell_link}>{props.value.date}</a>
     </div>
     : <></>
     );
@@ -1310,15 +1052,14 @@ const CellTitle: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell &
     const pubTitleStr = pubTitleLangStr && pubTitleLangStr[1] ? pubTitleLangStr[1] : "";
 
     return (<div style={{
-        ...commonCellStyles(props),
-        fontWeight: "bold",
+        ...commonCellStyles(props)
         // minWidth: props.displayType === DisplayType.Grid ? "200px" : undefined,
         // maxWidth: props.displayType === DisplayType.Grid ? "300px" : undefined,
         // width: props.displayType === DisplayType.Grid ? "250px" : undefined,
     }}
     dir={pubTitleIsRTL ? "rtl" : undefined}
     ><a
-        style={{ cursor: "pointer", paddingTop: "0.4em", paddingBottom: "0.4em" }}
+        className={stylesPublication.cell_bookTitle}
         tabIndex={0}
         onClick={(e) => {
             e.preventDefault();
@@ -1766,7 +1507,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
             },
 
             {
-                Header: props.__("catalog.about.button"),
+                Header: props.__("publication.accessibility.name"),
                 accessor: "col_a11y_accessibilitySummary",
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
@@ -1903,7 +1644,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
     // infinite render loop
     // tableInstance.setPageSize(pageSize);
     const initialState: UsePaginationState<IColumns> & TableState<IColumns> = {
-        pageSize: 20, // props.displayType === DisplayType.List ? 20 : 10;
+        pageSize: 50, // props.displayType === DisplayType.List ? 20 : 10;
         pageIndex: 0,
         hiddenColumns: props.displayType === DisplayType.Grid ? ["colLanguages", "colPublishers", "colPublishedDate", "colLCP", "colDuration", "colDescription", "col_a11y_accessibilitySummary"] : [],
     };
@@ -2002,32 +1743,19 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                         }}
                     />
                 <div>
-                    <p style={{fontSize: "14px", margin: "0 0 5px 40px"}}>{__("catalog.numberOfPages")}</p>
-                    <div style={{
-                        // pointerEvents: "all",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px"
-                    }}>
+                    <p className={stylesPublication.allBooks_header_pagination_title}>{__("catalog.numberOfPages")}</p>
+                    <div className={stylesPublication.allBooks_header_pagination_container}>
                     <button
-                    style={{
-                        margin:"0",
-                        padding: "0em",
-                        width: "20px",
-                        color: tableInstance.canPreviousPage ? "var(--color-button-primary)" : "gray",
-                    }}
+                    className={stylesPublication.allBooks_header_pagination_arrow}
                     aria-label={`${props.__("opds.firstPage")}`}
                     onClick={() => tableInstance.gotoPage(0)}
                     disabled={!tableInstance.canPreviousPage}>
                         <SVG ariaHidden={true} svg={ArrowFirstIcon} />
                     </button>
                     <button
+                    className={stylesPublication.allBooks_header_pagination_arrow}
                     style={{
-                        margin:"0",
-                        padding: "0",
                         transform: "rotate(180deg)",
-                        width: "20px",
-                        color: tableInstance.canPreviousPage ? "var(--color-button-primary)" : "gray",
                     }}
                     aria-label={`${props.__("opds.previous")}`}
                     onClick={() => tableInstance.previousPage()}
@@ -2036,7 +1764,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                     </button>
                     <select
                         aria-label={`${props.__("reader.navigation.currentPageTotal", {current: tableInstance.state.pageIndex + 1, total: tableInstance.pageOptions.length})}`}
-                        style={{cursor: "pointer", minWidth: "7em", textAlign: "center", padding: "0.2em", margin: "0", marginLeft: "0em", marginRight: "0em", border: "1px solid gray", borderRadius: "4px", height: "30px"}}
+                        className={stylesPublication.allBooks_header_pagination_select}
                         value={tableInstance.state.pageIndex}
                         onChange={(e) => {
                             const pageIndex = e.target.value ? Number(e.target.value) : 0;
@@ -2054,24 +1782,14 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                         }
                     </select>
                     <button
-                    style={{
-                        margin:"0",
-                        padding: "0",
-                        width: "20px",
-                        color: tableInstance.canNextPage ? "var(--color-button-primary)" : "gray",
-                    }}
+                    className={stylesPublication.allBooks_header_pagination_arrow}
                     aria-label={`${props.__("opds.next")}`}
                     onClick={() => tableInstance.nextPage()}
                     disabled={!tableInstance.canNextPage}>
                         <SVG ariaHidden={true} svg={ChevronRight} />
                     </button>
                     <button
-                    style={{
-                        margin:"0",
-                        padding: "0em",
-                        width: "20px",
-                        color: tableInstance.canNextPage ? "var(--color-button-primary)" : "gray",
-                    }}
+                    className={stylesPublication.allBooks_header_pagination_arrow}
                     aria-label={`${props.__("opds.lastPage")}`}
                     onClick={() => tableInstance.gotoPage(tableInstance.pageCount - 1)}
                     disabled={!tableInstance.canNextPage}>
@@ -2081,44 +1799,13 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                 </div>
             </div>
         </div>
-        {/* TODO!
-        {props.displayType === DisplayType.Grid ?
-            <div style={{display: "flex", justifyContent: "space-around", gap: "20px", width: "100%", flexWrap: "wrap",}}{...tableInstance.getTableBodyProps()}>
-                {props.publicationViews.map((pub) => {
-                return (
-                    <PublicationCard
-                    key={pub.identifier}
-                    publicationViewMaybeOpds={pub}
-                />
-                )
-            })}
-        </div> : */}
-        <div
-            style={{
-                overflow: "auto",
-                top: "0",
-                bottom: "0",
-                left: "0",
-                right: "0",
-                padding: "0",
-                // marginLeft: "30px",
-                // marginRight: "30px",
-                marginTop: "0em",
-                marginBottom: "0.4em",
-            }}>
+        <div className={stylesPublication.allBook_table_wrapper}>
         <span
             ref={scrollToViewRef}
             style={{visibility: "hidden"}}>{" "}</span>
         <table {...tableInstance.getTableProps()}
+            className={stylesPublication.allBook_table}
             style={{
-                fontSize: "90%",
-                borderRadius: "8px",
-                padding: "4px",
-                margin: "0",
-                // marginRight: "1em",
-                borderSpacing: "0",
-                // minWidth: "calc(100% - 30px)",
-                width: "100%",
                 display : props.displayType === DisplayType.Grid ? "flex" : "table"
             }}>
             {props.displayType === DisplayType.Grid ? "" 
@@ -2137,18 +1824,16 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                     const columnIsSortable = column.id !== "colCover";
 
                     const W = column.id === "colCover" ?
-                        (props.displayType === DisplayType.Grid ? "100px" : "40px") :
-                        column.id === "colLCP" ?
                         "60px" :
                         column.id === "colPublishedDate" ?
-                        "120px" :
+                        "100px" :
                         column.id === "colProgression" ?
                         "100px" :
                         column.id === "colDuration" ?
                         "100px" :
                         column.id === "col_a11y_accessibilitySummary" ?
-                        "180px" :
-                        "160px";
+                        "160px" :
+                        "100px";
 
                     return (<th
                         key={`headtrth_${i}`}
@@ -2161,20 +1846,12 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                             width: W,
                             minWidth: W,
                             maxWidth: W,
-                            borderBottom: "1px solid #bcbcbc",
-                            borderLeft: "1px solid #bcbcbc",
-                            padding: "0.7em",
-                            margin: "0",
-                            background: "#eeeeee", // columnIsSortable ? "#eeeeee" : "white",
-                            color: "black",
-                            whiteSpace: "nowrap",
-                            // ...{ cursor: columnIsSortable ? "pointer" : undefined },
                         }}
+                        className={stylesPublication.allBook_table_head}
                         >
                         {
                         columnIsSortable ?
                         <><button
-                        style={{height: "auto", padding: "0.2em", margin: "0", fontWeight: "bold", fontSize: "100%"}}
                         onClick={() => {
                             column.toggleSortBy();
                         }}
@@ -2267,14 +1944,9 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
 
             </thead>}
             <tbody {...tableInstance.getTableBodyProps()} 
+            className={stylesPublication.allBook_table_body}
             style={{
-                width: "100%",
                 display : props.displayType === DisplayType.Grid ? "flex" : "",
-                justifyContent: "space-evenly",
-                flexWrap: "wrap",
-                gap: "10px",
-                marginBottom: "20px",
-                backgroundColor: "white"
              }}
                 >
                 {tableInstance.page.map((row, index) => {
@@ -2283,26 +1955,17 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                 tableInstance.prepareRow(row);
                     return(
                         props.displayType === DisplayType.Grid ? 
-                        <tr>
-                            <PublicationCard publicationViewMaybeOpds={props.publicationViews[id]} key={index} />  
+                        <tr key={index}>
+                            <td><PublicationCard publicationViewMaybeOpds={props.publicationViews[id]} /></td>
                         </tr>
                         :
 
                         <tr key={`bodytr_${index}`} {...row.getRowProps()}
                         style={{
-                            // outlineColor: "#cccccc",
-                            // outlineOffset: "0px",
-                            // outlineStyle: "solid",
-                            // outlineWidth: "1px",
-                            backgroundColor: index % 2 ? "#efefef" : undefined,
+                            backgroundColor: index % 2 ? "var(--color-figma-grey)" : undefined,
                         }}>{row.cells.map((cell, i) =>
                             {
                                 return (<td key={`bodytrtd_${i}`} {...cell.getCellProps()}
-                                style={{
-                                    padding: "0",
-                                    margin: "0",
-                                    // border: "solid 1px #eeeeee",
-                                }}
                                 >{
                                     cell.render("Cell", renderProps_Cell)
                                 }</td>);

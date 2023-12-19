@@ -49,8 +49,8 @@ class Cover extends React.Component<IProps, IState> {
         super(props);
 
         const { cover } = this.props.publicationViewMaybeOpds;
-
         let imgUrl = "";
+
         if (cover) {
             const coverUrl = cover.coverUrl || cover.coverLinks[0]?.url;
             const thumbnailUrl = cover.coverUrl || cover.thumbnailLinks[0]?.url;
@@ -70,6 +70,28 @@ class Cover extends React.Component<IProps, IState> {
         this.imageOnError = this.imageOnError.bind(this);
     }
 
+    componentDidUpdate(prevProps: IProps) {
+        if (prevProps.publicationViewMaybeOpds.cover !== this.props.publicationViewMaybeOpds.cover) {
+            const { cover } = this.props.publicationViewMaybeOpds;
+            let imgUrl = "";
+
+            if (cover) {
+                const coverUrl = cover.coverUrl || cover.coverLinks[0]?.url;
+                const thumbnailUrl = cover.coverUrl || cover.thumbnailLinks[0]?.url;
+
+                if (this.props.coverType === "cover") {
+                    imgUrl = coverUrl || thumbnailUrl;
+                } else {
+                    imgUrl = thumbnailUrl || coverUrl;
+                }
+            }
+
+            this.setState({
+                imgUrl,
+                imgErroredOnce: false,
+            });
+        }
+    }
     public render()  {
         const { publicationViewMaybeOpds, translator } = this.props;
 

@@ -334,7 +334,6 @@ button {
   height: 20px;
   border-radius: 4px;
   padding: 5px;
-  min-width: 100px;
   background-color: var(--color-button-secondary);
   color: var(--color-button-primary);
   display: flex;
@@ -349,6 +348,9 @@ button {
     width: 15px;
     height: 15px;
     fill: var(--color-button-primary);
+  }
+  input {
+    display: none;
   }
 }
 

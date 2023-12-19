@@ -7,9 +7,7 @@
 
 import * as React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { CatalogEntryView } from "readium-desktop/common/views/catalog";
-import * as stylesButtons from "readium-desktop/renderer/assets/styles/components/buttons.css";
 import * as stylesGlobal from "readium-desktop/renderer/assets/styles/global.css";
 import * as stylesSlider from "readium-desktop/renderer/assets/styles/components/slider.css";
 import {
@@ -23,9 +21,7 @@ import AboutThoriumButton from "./AboutThoriumButton";
 import NoPublicationInfo from "./NoPublicationInfo";
 import SortMenu from "./SortMenu";
 import TagLayout from "./TagLayout";
-import { DisplayType, IRouterLocationState } from "../../routing";
 import classNames from "classnames";
-import typed_i18n from "readium-desktop/typings/en.translation";
 import { useTranslator } from "readium-desktop/renderer/common/hooks/useTranslator";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -132,7 +128,7 @@ class CatalogGridView extends React.Component<IProps, IState> {
                     this.props.catalogEntries.map((entry, entryIndex: number) =>
                             entry.totalCount > 0
                                 ? (
-                                    <EntrySection entry={entry} entryIndex={entryIndex} />
+                                    <EntrySection entry={entry} entryIndex={entryIndex} key={entryIndex} />
                                 )
                                 : <div
                                     key={entryIndex}
