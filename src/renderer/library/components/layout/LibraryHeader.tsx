@@ -18,7 +18,7 @@ import {
 import SkipLink from "readium-desktop/renderer/common/components/SkipLink";
 import { ILibraryRootState } from "readium-desktop/common/redux/states/renderer/libraryRootState";
 import { DisplayType, IRouterLocationState } from "../../routing";
-import * as PageIcon from "readium-desktop/renderer/assets/icons/page-icon.svg";
+import * as HomeIcon from "readium-desktop/renderer/assets/icons/home-icon.svg";
 import * as GearIcon from "readium-desktop/renderer/assets/icons/gear-icon.svg";
 import * as ShelfIcon from "readium-desktop/renderer/assets/icons/shelf-icon.svg";
 import SVG from "readium-desktop/renderer/common/components/SVG";
@@ -34,10 +34,10 @@ interface NavigationHeader {
 const headerNav: NavigationHeader[] = [
     {
         route: "/home",
-        label: "books",
+        label: "homeTitle",
         matchRoutes: ["/", "/home"],
         styles: [],
-        svg: PageIcon,
+        svg: HomeIcon,
     },
     {
         route: "/library/search/all",

@@ -353,7 +353,7 @@ const CellGlobalFilter: React.FC<ITableCellProps_GlobalFilter> = (props) => {
     const onInputChange = useAsyncDebounce((v) => {
 
         // if (v) {}
-        props.setShowColumnFilters(false);
+        props.setShowColumnFilters(true);
 
         props.setGlobalFilter(v);
     }, 500);
@@ -386,7 +386,7 @@ const CellGlobalFilter: React.FC<ITableCellProps_GlobalFilter> = (props) => {
                 }}
                 onKeyUp={(e) => {
                     if (props.accessibilitySupportEnabled && e.key === "Enter") {
-                        props.setShowColumnFilters(false);
+                        props.setShowColumnFilters(true);
                         props.setGlobalFilter( // value
                             (props.focusInputRef?.current?.value || "").trim() || undefined);
                     }
@@ -399,7 +399,7 @@ const CellGlobalFilter: React.FC<ITableCellProps_GlobalFilter> = (props) => {
             </div>
             {props.accessibilitySupportEnabled ? <button
                 onClick={() => {
-                    props.setShowColumnFilters(false);
+                    props.setShowColumnFilters(true);
                     props.setGlobalFilter( // value
                         (props.focusInputRef?.current?.value || "").trim() || undefined);
                 }}
@@ -1158,7 +1158,7 @@ interface ITableCellProps_TableView {
 }
 export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Common> = (props) => {
 
-    const [showColumnFilters, setShowColumnFilters] = React.useState(false);
+    const [showColumnFilters, setShowColumnFilters] = React.useState(true);
 
     const scrollToViewRef = React.useRef(null);
 
@@ -1497,14 +1497,14 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                 accessor: "colDuration",
                 sortType: sortFunction,
             },
-            {
-                Header: props.__("catalog.description"),
-                accessor: "colDescription",
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                Cell: CellDescription,
-                sortType: sortFunction,
-            },
+            // {
+            //     Header: props.__("catalog.description"),
+            //     accessor: "colDescription",
+            //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //     // @ts-expect-error
+            //     Cell: CellDescription,
+            //     sortType: sortFunction,
+            // },
 
             {
                 Header: props.__("publication.accessibility.name"),
@@ -1806,7 +1806,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
         <table {...tableInstance.getTableProps()}
             className={stylesPublication.allBook_table}
             style={{
-                display : props.displayType === DisplayType.Grid ? "flex" : "table",
+                display :"table",
             }}>
             {props.displayType === DisplayType.Grid ? ""
             :
@@ -1900,7 +1900,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                             checked={showColumnFilters ? true : false}
                             onChange={() => {
                                 const show = showColumnFilters;
-                                setShowColumnFilters(!showColumnFilters);
+                                setShowColumnFilters(showColumnFilters);
                                 setTimeout(() => {
                                     if (!show) {
                                         tableInstance.setGlobalFilter("");
@@ -1946,7 +1946,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
             <tbody {...tableInstance.getTableBodyProps()}
             className={stylesPublication.allBook_table_body}
             style={{
-                display : props.displayType === DisplayType.Grid ? "flex" : "",
+                display : props.displayType === DisplayType.Grid ? "grid" : "",
             }}
                 >
                 {tableInstance.page.map((row, index) => {

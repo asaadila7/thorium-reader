@@ -13,7 +13,8 @@
 /* 1. card */
 
 .publication_wrapper {
-  width: 175px;
+  width: 200px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
