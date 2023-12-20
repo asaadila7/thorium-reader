@@ -20,6 +20,7 @@ import { ILibraryRootState } from "readium-desktop/common/redux/states/renderer/
 import { DisplayType, IRouterLocationState } from "../../routing";
 import * as HomeIcon from "readium-desktop/renderer/assets/icons/home-icon.svg";
 import * as GearIcon from "readium-desktop/renderer/assets/icons/gear-icon.svg";
+import * as CatalogsIcon from "readium-desktop/renderer/assets/icons/catalogs-icon.svg";
 import * as ShelfIcon from "readium-desktop/renderer/assets/icons/shelf-icon.svg";
 import SVG from "readium-desktop/renderer/common/components/SVG";
 
@@ -51,7 +52,7 @@ const headerNav: NavigationHeader[] = [
         label: "catalogs",
         matchRoutes: ["/opds"],
         styles: [],
-        svg: ShelfIcon,
+        svg: CatalogsIcon,
     },
     {
         route: "/settings",
@@ -152,6 +153,7 @@ class Header extends React.Component<IProps, undefined> {
                     aria-pressed={active}
                     role={"button"}
                     className={active ? stylesButtons.button_nav_primary : ""}
+                    style={{position: item.label === "settings" ? "absolute" : "relative", bottom: "10px" }}
                 >
                     <SVG ariaHidden svg={item.svg} />
                     <h3>{

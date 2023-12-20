@@ -183,15 +183,6 @@ nav + nav + .breadcrumb + .main {
   top: 181px;
 }
 
-table > * {
-  background-color: var(--color-light-grey);
-  color: black !important;
-}
-
-table tr td {
-  border-bottom: 1px solid black;
-}
-
 /* ============== FAST CLASS ================= */
 
 .anchor_link {
