@@ -11,6 +11,7 @@ export declare const allBooks_header_pagination_title: string;
 export declare const cell: string;
 export declare const cell_bookTitle: string;
 export declare const cell_coverImg: string;
+export declare const cell_description: string;
 export declare const cell_link: string;
 export declare const cell_multi_langs: string;
 export declare const cell_wrapper: string;

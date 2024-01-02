@@ -18,12 +18,12 @@ import SVG from "readium-desktop/renderer/common/components/SVG";
 import * as stylesPublication from "readium-desktop/renderer/assets/styles/components/allPublicationsPage.scss";
 import * as stylesInput from "readium-desktop/renderer/assets/styles/components/inputs.css";
 import * as stylesButtons from "readium-desktop/renderer/assets/styles/components/buttons.css";
-import * as magnifyingGlass from "readium-desktop/renderer/assets/icons/magnifying_glass.svg";
 // import * as ArrowLeftIcon from "readium-desktop/renderer/assets/icons/baseline-arrow_left_ios-24px.svg";
 import * as ArrowLastIcon from "readium-desktop/renderer/assets/icons/arrowLast-icon.svg";
 import * as SearchIcon from "readium-desktop/renderer/assets/icons/search-icon.svg";
 import * as ArrowFirstIcon from "readium-desktop/renderer/assets/icons/arrowFirst-icon.svg";
 import * as ChevronRight from "readium-desktop/renderer/assets/icons/chevron-right.svg";
+import * as ChevronDown from "readium-desktop/renderer/assets/icons/chevron-down.svg";
 import { matchSorter } from "match-sorter";
 import { readerActions } from "readium-desktop/common/redux/actions";
 import { DialogTypeName } from "readium-desktop/common/models/dialog";
@@ -320,7 +320,7 @@ const commonCellStyles =  (props: ITableCellProps_Column & ITableCellProps_Gener
         // maxWidth: props.displayType === DisplayType.Grid ? "150px" : "50px",
 
         padding: "0.4em",
-        overflowY: "auto",
+        overflowY: "hidden",
         textAlign: "left",
         userSelect: "text",
     };
@@ -510,7 +510,7 @@ const CellColumnFilter: React.FC<ITableCellProps_Filter & ITableCellProps_Column
             props.column.setFilter( // props.column.filterValue
                 (inputRef?.current?.value || "").trim() || undefined);
         }}
-    ><SVG ariaHidden svg={magnifyingGlass} /></button> : <></>
+    ><SVG ariaHidden svg={SearchIcon} /></button> : <></>
     }
     </div>
     : <></>;
@@ -806,7 +806,9 @@ const CellTags: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell & 
 };
 
 const CellDescription: React.FC<ITableCellProps_Column & ITableCellProps_GenericCell & ITableCellProps_StringValue> = (props) => {
-    return (<div style={{
+    return (<div 
+        className={stylesPublication.cell_description}
+        style={{
         ...commonCellStyles(props),
         paddingBottom: "0",
         // marginBottom: "0.4em",
@@ -819,7 +821,9 @@ const CellDescription: React.FC<ITableCellProps_Column & ITableCellProps_Generic
 
         // textAlign: props.displayType === DisplayType.Grid ? "justify" : "start",
         textAlign: "start",
-    }} dangerouslySetInnerHTML={{__html: props.value}} />);
+    }}>
+        <p>{props.value}</p> 
+        {props.value ? <SVG ariaHidden svg={ChevronDown} /> : ""}</div>);
 };
 
 // interface IColumnValue_A11y_StringArrayArray extends IColumnValue_BaseString {
@@ -1497,14 +1501,14 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                 accessor: "colDuration",
                 sortType: sortFunction,
             },
-            // {
-            //     Header: props.__("catalog.description"),
-            //     accessor: "colDescription",
-            //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //     // @ts-expect-error
-            //     Cell: CellDescription,
-            //     sortType: sortFunction,
-            // },
+            {
+                Header: props.__("catalog.description"),
+                accessor: "colDescription",
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                Cell: CellDescription,
+                sortType: sortFunction,
+            },
 
             {
                 Header: props.__("publication.accessibility.name"),
@@ -1900,7 +1904,7 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                             checked={showColumnFilters ? true : false}
                             onChange={() => {
                                 const show = showColumnFilters;
-                                setShowColumnFilters(showColumnFilters);
+                                setShowColumnFilters(!showColumnFilters);
                                 setTimeout(() => {
                                     if (!show) {
                                         tableInstance.setGlobalFilter("");
@@ -1916,8 +1920,8 @@ export const TableView: React.FC<ITableCellProps_TableView & ITableCellProps_Com
                         /><label
                             aria-hidden="true"
                             htmlFor="setShowColumnFiltersCheckbox"
-                            style={{cursor: "pointer", padding: "0.2em", paddingBottom: "0", fill: "black", display: "inline-block", width: "16px", border: showColumnFilters ? "2px solid black" : "1px solid gray", borderRadius: "4px"}}>
-                            <SVG ariaHidden svg={magnifyingGlass} />
+                            style={{cursor: "pointer", padding: "0.2em", color: "var(--color-button-primary)", paddingBottom: "0", display: "inline-block", width: "20px"}}>
+                            <SVG ariaHidden svg={SearchIcon} />
                         </label></>
                         }
                         </th>);
