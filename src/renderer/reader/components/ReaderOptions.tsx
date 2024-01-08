@@ -144,6 +144,58 @@ export const FontFamily = ({config: {font}, set}: {config: Pick<ReaderConfig, "f
 
     // !!! why only 5 items in the combox works, one more trigger the keyboard interaction !!!
 
+    // doesn't work :
+    // when clicking on the combobox the popover menu disappears and the reader.tsx is refreshed
+
+    // logs :
+
+    // [2]   r2:navigator#electron/renderer/webview/preload ++++ scrollToHashDebounced FROM RESIZE +360ms
+    // [2]   r2:navigator#electron/renderer/webview/preload ++++ scrollToHashRaw FROM DEBOUNCED +103ms
+    // [2]   r2:navigator#electron/renderer/webview/preload ++++ scrollToHashRaw +0ms
+    // [2]   r2:navigator#electron/renderer/webview/preload KEYBOARD FOCUS REQUEST (1)  p:nth-child(21) +1ms
+    // [2]   r2:navigator#electron/renderer/index KEYBOARD FOCUS REQUEST (2)  r2_webview1 react-aria5766539967-:r16: +435ms
+    // [2]   r2:navigator#electron/renderer/webview/preload focusin mouse click --- IGNORE +1ms
+    // [2]   r2:navigator#electron/renderer/webview/preload_ ^^^ SELECTION COLLAPSED. +254ms
+    // [2]   r2:navigator#electron/renderer/webview/preload preceding or containing EPUB page break 37 +1ms
+    // [2]   r2:navigator#electron/renderer/webview/preload preceding or containing heading undefined À la recherche d’une solution. +0ms
+    // [2]   r2:navigator#electron/renderer/webview/preload preceding or containing heading chap-3 III +0ms
+    // [2]   r2:navigator#electron/renderer/location >->-> +257ms
+    // [2]   r2:navigator#electron/renderer/location {
+    // [2]   r2:navigator#electron/renderer/location   audioPlaybackInfo: undefined,
+    // [2]   r2:navigator#electron/renderer/location   docInfo: {
+    // [2]   r2:navigator#electron/renderer/location     isFixedLayout: false,
+    // [2]   r2:navigator#electron/renderer/location     isRightToLeft: false,
+    // [2]   r2:navigator#electron/renderer/location     isVerticalWritingMode: false
+    // [2]   r2:navigator#electron/renderer/location   },
+    // [2]   r2:navigator#electron/renderer/location   epubPage: '37',
+    // [2]   r2:navigator#electron/renderer/location   epubPageID: 'page_37',
+    // [2]   r2:navigator#electron/renderer/location   headings: [
+    // [2]   r2:navigator#electron/renderer/location     { id: undefined, level: 2, txt: 'À la recherche d’une solution.' },
+    // [2]   r2:navigator#electron/renderer/location     { id: 'chap-3', level: 1, txt: 'III' }
+    // [2]   r2:navigator#electron/renderer/location   ],
+    // [2]   r2:navigator#electron/renderer/location   locator: {
+    // [2]   r2:navigator#electron/renderer/location     href: 'OPS/c3_La_Marque_des_quatre_III.xhtml',
+    // [2]   r2:navigator#electron/renderer/location     locations: {
+    // [2]   r2:navigator#electron/renderer/location       cfi: '/4/2[chap-3]/42',
+    // [2]   r2:navigator#electron/renderer/location       cssSelector: 'p:nth-child(21)',
+    // [2]   r2:navigator#electron/renderer/location       position: undefined,
+    // [2]   r2:navigator#electron/renderer/location       progression: 0.6110195667907361
+    // [2]   r2:navigator#electron/renderer/location     },
+    // [2]   r2:navigator#electron/renderer/location     text: undefined,
+    // [2]   r2:navigator#electron/renderer/location     title: 'À la recherche d’une solution'
+    // [2]   r2:navigator#electron/renderer/location   },
+    // [2]   r2:navigator#electron/renderer/location   paginationInfo: undefined,
+    // [2]   r2:navigator#electron/renderer/location   secondWebViewHref: undefined,
+    // [2]   r2:navigator#electron/renderer/location   selectionInfo: undefined,
+    // [2]   r2:navigator#electron/renderer/location   selectionIsNew: undefined
+    // [2]   r2:navigator#electron/renderer/location } +1ms
+    // [2]   r2:navigator#electron/renderer/index_ RENDERED FONT  dys3 +9ms
+    // [2]   r2:navigator#electron/renderer/index_ RENDERED FONT  dys3 +6ms
+    // [2]   r2:navigator#electron/renderer/index_ RENDERED FONT  dys3 +6ms
+    // [2]   r2:navigator#electron/renderer/index_ RENDERED FONT  dys3 +5ms
+    // [2]   r2:navigator#electron/renderer/webview/preload ANIMATION TIMEOUT REMOVE +2s
+
+
     // const options = [
     //     // { id: 0, value: 'DEFAULT', name: 'Original font', fontFamily: '' },
     //     {
