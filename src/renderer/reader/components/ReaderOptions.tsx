@@ -5,76 +5,323 @@
 // that can be found in the LICENSE file exposed on Github (readium) in the project repository.
 // ==LICENSE-END==
 
+import * as React from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import * as Tabs from "@radix-ui/react-tabs";
 import classNames from "classnames";
 import debounce from "debounce";
-import * as React from "react";
-import { connect } from "react-redux";
-import { Font } from "readium-desktop/common/models/font";
-import { ReaderConfig } from "readium-desktop/common/models/reader";
-import { ToastType } from "readium-desktop/common/models/toast";
-import { readerActions, toastActions } from "readium-desktop/common/redux/actions";
-import { readerConfigInitialState } from "readium-desktop/common/redux/states/reader";
-import { IReaderRootState } from "readium-desktop/common/redux/states/renderer/readerRootState";
-import * as AutoIcon from "readium-desktop/renderer/assets/icons/auto.svg";
-import * as ColumnIcon from "readium-desktop/renderer/assets/icons/colonne.svg";
-import * as Column2Icon from "readium-desktop/renderer/assets/icons/colonne2.svg";
-import * as DefileIcon from "readium-desktop/renderer/assets/icons/defile.svg";
-import * as DoneIcon from "readium-desktop/renderer/assets/icons/done.svg";
-import * as PageIcon from "readium-desktop/renderer/assets/icons/page.svg";
-import * as JustifyIcon from "readium-desktop/renderer/assets/icons/justifie.svg";
-import * as StartIcon from "readium-desktop/renderer/assets/icons/gauche.svg";
-import * as PagineIcon from "readium-desktop/renderer/assets/icons/pagine.svg";
-import * as stylesReader from "readium-desktop/renderer/assets/styles/reader-app.css";
-import {
-    TranslatorProps, withTranslator,
-} from "readium-desktop/renderer/common/components/hoc/translator";
+import * as QuitIcon from "readium-desktop/renderer/assets/icons/baseline-close-24px.svg";
+import * as stylesModals from "readium-desktop/renderer/assets/styles/components/modals.css";
+import * as TextAreaIcon from "readium-desktop/renderer/assets/icons/textarea-icon.svg";
+import * as LayoutIcon from "readium-desktop/renderer/assets/icons/layout-icon.svg";
+import * as AlignLeftIcon from "readium-desktop/renderer/assets/icons/alignleft-icon.svg";
+import * as VolumeUpIcon from "readium-desktop/renderer/assets/icons/volup-icon.svg";
+import * as SwatchesIcon from "readium-desktop/renderer/assets/icons/swatches-icon.svg"
 import SVG from "readium-desktop/renderer/common/components/SVG";
-import { TDispatch } from "readium-desktop/typings/redux";
-import fontList, { FONT_ID_DEFAULT, FONT_ID_VOID } from "readium-desktop/utils/fontList";
+// import { TDispatch } from "readium-desktop/typings/redux";
+// import fontList, { FONT_ID_DEFAULT, FONT_ID_VOID } from "readium-desktop/utils/fontList";
 
-import { colCountEnum, textAlignEnum } from "@r2-navigator-js/electron/common/readium-css-settings";
+// import { colCountEnum, textAlignEnum } from "@r2-navigator-js/electron/common/readium-css-settings";
 
 import { IPdfPlayerColumn, IPdfPlayerScale, IPdfPlayerView } from "../pdf/common/pdfReader.type";
-import { readerLocalActionSetConfig } from "../redux/actions";
-import optionsValues, { IReaderOptionsProps } from "./options-values";
-import SideMenu from "./sideMenu/SideMenu";
-import { SectionData } from "./sideMenu/sideMenuData";
+// import { readerLocalActionSetConfig } from "../redux/actions";
+import { IReaderOptionsProps } from "./options-values";
+import * as stylesSettings from "readium-desktop/renderer/assets/styles/components/settings.scss";
+import { useTranslator } from "readium-desktop/renderer/common/hooks/useTranslator";
+import * as stylesButtons from "readium-desktop/renderer/assets/styles/components/buttons.css";
+import { ComboBox, ComboBoxItem } from "readium-desktop/renderer/common/components/ComboBox";
+import { ReaderConfig } from "readium-desktop/common/models/reader";
+import * as stylesReader from "readium-desktop/renderer/assets/styles/reader-app.css";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IBaseProps extends TranslatorProps, IReaderOptionsProps {
-    focusSettingMenuButton: () => void;
-}
-
-// IProps may typically extend:
-// RouteComponentProps
-// ReturnType<typeof mapStateToProps>
-// ReturnType<typeof mapDispatchToProps>
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IProps extends IBaseProps, ReturnType<typeof mapDispatchToProps>, ReturnType<typeof mapStateToProps> {
-}
-
-enum themeType {
-    Without,
-    Sepia,
-    Night,
+interface IBaseProps extends IReaderOptionsProps {
 }
 
 interface IState {
-    pdfScale: IPdfPlayerScale | undefined;
-    pdfView: IPdfPlayerView | undefined;
-    pdfCol: IPdfPlayerColumn | undefined;
+    pdfScale?: IPdfPlayerScale | undefined;
+    pdfView?: IPdfPlayerView | undefined;
+    pdfCol?: IPdfPlayerColumn | undefined;
 }
 
-type ThandleSettingChange = IReaderOptionsProps["handleSettingChange"];
+const TabTitle = ({title}: {title: string}) => {
+    return (
+        <div className={stylesSettings.settings_tab_title}>
+            <h2>{title}</h2>
+        </div>
+    );
+};
 
-export class ReaderOptions extends React.Component<IProps, IState> {
+/*
+
+
+const LanguageSettings: React.FC<{}> = () => {
+    const [__] = useTranslator();
+    const locale = useSelector((state: IRendererCommonRootState) => state.i18n.locale);
+    const currentLanguageISO = locale as keyof typeof AvailableLanguages;
+    const currentLanguageString = AvailableLanguages[currentLanguageISO];
+    const dispatch = useDispatch();
+    const [options] = React.useState(() => Object.entries(AvailableLanguages).map(([k,v], i) => ({id: i, name: v, iso: k})));
+    const setLang = (localeSelected: React.Key) => {
+
+        if (typeof localeSelected !== "number") return;
+        const obj = options.find(({id}) => id === localeSelected);
+        dispatch(i18nActions.setLocale.build(obj.iso));
+    };
+    const selectedKey = options.find(({name}) => name === currentLanguageString);
+    return (
+        <ComboBox label={__("settings.language.languageChoice")} defaultItems={options} defaultSelectedKey={selectedKey?.id} onSelectionChange={setLang} svg={LanguageIcon}>
+            {item => <ComboBoxItem>{item.name}</ComboBoxItem>}
+        </ComboBox>
+    );
+};
+
+*/
+
+
+const Theme = ({theme, set}: {theme: Pick<ReaderConfig, "night" | "sepia">, set: (a: Partial<ReaderConfig>) => void}) => {
+    const [__] = useTranslator();
+    const [options] = React.useState(() => [
+        {
+            id: 1,
+            name: `${__("reader.settings.theme.name.Neutral")}`,
+            value: "neutral",
+        },
+        {
+            id: 2,
+            name: `${__("reader.settings.theme.name.Sepia")}`,
+            value: "sepia",
+        },
+        {
+            id: 3,
+            name: `${__("reader.settings.theme.name.Night")}`,
+            value: "night",
+        },
+    ]);
+
+    const defaultKey = theme.night ? 3 : theme.sepia ? 2 : 1;
+
+    return (
+        <ComboBox label={__("reader.settings.theme.title")} defaultItems={options} defaultSelectedKey={defaultKey} onSelectionChange={(key: React.Key) => {
+            set({
+                night: key === 3,
+                sepia: key === 2,
+            });
+        }} svg={SwatchesIcon}>
+            {item => <ComboBoxItem>{item.name}</ComboBoxItem>}
+        </ComboBox>
+    );
+}
+
+export const ReaderOptions: React.FC<IBaseProps> = (props) => {
+    const { setSettings, pdfEventBus, readerConfig, open, toggleMenu } = props;
+    const [__] = useTranslator();
+
+    const [pdfState, setPdfState] = React.useState<IState>({
+        pdfScale: undefined,
+        pdfCol: undefined,
+        pdfView: undefined,
+    });
+
+    const setScale = (scale: IPdfPlayerScale) => {
+
+        console.log("scale", scale);
+
+        setPdfState({
+            pdfScale: scale,
+        });
+    };
+
+    const setView = (view: IPdfPlayerView) => {
+
+        console.log("view", view);
+
+        setPdfState({
+            pdfView: view,
+        });
+    };
+
+    const setCol = (col: IPdfPlayerColumn) => {
+
+        console.log("col", col);
+
+        setPdfState({
+            pdfCol: col,
+        });
+    };
+
+    React.useEffect(() => {
+        if (pdfEventBus) {
+            pdfEventBus.subscribe("scale", setScale);
+            pdfEventBus.subscribe("view", setView);
+            pdfEventBus.subscribe("column", setCol);
+        }
+
+        return () => {
+
+            if (props.pdfEventBus) {
+                props.pdfEventBus.remove(setScale, "scale");
+                props.pdfEventBus.remove(setView, "view");
+                props.pdfEventBus.remove(setCol, "column");
+            }
+        }
+
+    }, [pdfEventBus]);
+
+
+    if (!readerConfig) {
+        return <></>;
+    }
+
+    if (!open) {
+        return <></>;
+    }
+
+    const setPartialSettings = (settings: Partial<ReaderConfig>) => {
+        setSettings({...readerConfig, ...settings});
+    }
+
+    // const { overridePublisherDefault } = readerConfig;
+    const overridePublisherDefault = true;
+
+    const setOverridePublisherDefault = () => {};
+
+    const { isDivina, isPdf } = props;
+    const isEpub = !isDivina && !isPdf;
+
+    const sections: Array<React.JSX.Element> = [];
+
+    const TextTrigger =
+        <Tabs.Trigger value="tab-text" disabled={overridePublisherDefault ? false : true}>
+            <SVG ariaHidden svg={TextAreaIcon} />
+            <h3>{__("reader.settings.text")}</h3>
+            {overridePublisherDefault ? <></> : <i>{__("reader.settings.disabled")}</i>}
+        </Tabs.Trigger>
+
+    const DivinaTrigger =
+        <Tabs.Trigger value="tab-divina" disabled={overridePublisherDefault ? false : true}>
+            <SVG ariaHidden svg={TextAreaIcon} />
+            <h3>{__("reader.settings.disposition.title")}</h3>
+        </Tabs.Trigger>
+
+    const SpacingTrigger =
+        <Tabs.Trigger value="tab-spacing" disabled={overridePublisherDefault ? false : true}>
+            <SVG ariaHidden svg={AlignLeftIcon} />
+            <h3>{__("reader.settings.spacing")}</h3>
+            {overridePublisherDefault ? <></> : <i>{__("reader.settings.disabled")}</i>}
+        </Tabs.Trigger>
+
+    const DisplayTrigger =
+        <Tabs.Trigger value="tab-display">
+            <SVG ariaHidden svg={LayoutIcon} />
+            <h3>{__("reader.settings.display")}</h3>
+        </Tabs.Trigger>
+
+    const AudioTrigger =
+        <Tabs.Trigger value="tab-audio">
+            <SVG ariaHidden svg={VolumeUpIcon} />
+            <h3>{__("reader.media-overlays.title")}</h3>
+        </Tabs.Trigger>
+
+    const PdfZoomTrigger =
+        <Tabs.Trigger value="tab-pdfzoom">
+            <SVG ariaHidden svg={VolumeUpIcon} />
+            <h3>{__("reader.settings.pdfZoom.title")}</h3>
+        </Tabs.Trigger>
+
+    let defaultTabValue = "tab-display";
+    if (isDivina) {
+        sections.push(DivinaTrigger);
+        defaultTabValue = "tab-divina";
+    }
+    if (isPdf) {
+        sections.push(PdfZoomTrigger);
+        defaultTabValue = "tab-pdf";
+    }
+    if (isPdf || isEpub) {
+        sections.push(DisplayTrigger);
+    }
+    if (isEpub) {
+        sections.push(AudioTrigger);
+        sections.push(TextTrigger);
+        sections.push(SpacingTrigger);
+    }
+
+    const nightTheme = readerConfig.night;
+    const sepiaTheme = readerConfig.sepia; // mutually exclusive
+
+    return (
+        <Dialog.Root
+            open={open}
+            onOpenChange={
+                (open) => {
+                    console.log("Settings modal state open=", open);
+                    toggleMenu();
+                }}
+        >
+            <Dialog.Portal>
+                <div className={stylesModals.modal_dialog_overlay}></div>
+                <Dialog.Content className={classNames(stylesModals.modal_dialog, nightTheme ? stylesReader.nightMode : sepiaTheme ? stylesReader.sepiaMode : "")}>
+                    <Tabs.Root defaultValue={defaultTabValue} data-orientation="vertical" orientation="vertical" className={stylesSettings.settings_container}>
+                        <Tabs.List className={stylesSettings.settings_tabslist} aria-orientation="vertical" data-orientation="vertical">
+                            {sections}
+                        </Tabs.List>
+                        <div className={stylesSettings.settings_content}>
+                            <Tabs.Content value="tab-text" tabIndex={-1}>
+                                <TabTitle title={__("reader.settings.text")} />
+                                <section className={stylesSettings.settings_tab}>
+                                    <Theme theme={readerConfig} set={setPartialSettings}></Theme>
+                                    {/* <ReadingTheme /> */}
+                                    {/* <FontSize /> */}
+                                    {/* <FontFamily /> */}
+                                </section>
+                            </Tabs.Content>
+                            <Tabs.Content value="tab-spacing" tabIndex={-1}>
+                                <TabTitle title={__("reader.settings.spacing")} />
+                                <section className={stylesSettings.settings_tab}>
+                                    {/* <ReadingSpacing /> */}
+                                </section>
+                            </Tabs.Content>
+                            <Tabs.Content value="tab-display" tabIndex={-1}>
+                                <TabTitle title={__("reader.settings.display")} />
+                                <section className={stylesSettings.settings_tab}>
+                                    {/* <ReadingDisplayLayout /> */}
+                                    {/* <ReadingDisplayAlign /> */}
+                                    {/* <ReadingDisplayCol /> */}
+                                    {/* <ReadingDisplayMathJax /> */}
+                                </section>
+                            </Tabs.Content>
+                            <Tabs.Content value="tab-audio" tabIndex={-1}>
+                                <TabTitle title={__("reader.media-overlays.title")} />
+                                <section className={stylesSettings.settings_tab}>
+                                    {/* <ReadingAudio /> */}
+                                </section>
+                            </Tabs.Content>
+                        </div>
+                    </Tabs.Root>
+
+                    <div className={stylesSettings.close_button_div}>
+                        <Dialog.Close asChild>
+                            <button className={stylesButtons.button_transparency_icon} aria-label="Close">
+                                <SVG ariaHidden={true} svg={QuitIcon} />
+                            </button>
+                        </Dialog.Close>
+                    </div>
+                </Dialog.Content>
+            </Dialog.Portal>
+        </Dialog.Root>
+    );
+}
+
+
+/*
+export class ReaderOptions_ extends React.Component<IProps, IState> {
 
     public handleSettingChangeDebounced: ThandleSettingChange;
 
     constructor(props: IProps) {
         super(props);
 
-        this.handleSettingChangeDebounced = debounce(this.props.handleSettingChange, 500);
+        .handleSettingChangeDebounced = debounce(this.props.handleSettingChge, 500);
 
         this.state = {
             pdfScale: undefined,
@@ -175,16 +422,32 @@ export class ReaderOptions extends React.Component<IProps, IState> {
         }
 
         return (
-            <SideMenu
-                openedSection={this.props.openedSection}
-                className={stylesReader.read_settings}
-                listClassName={stylesReader.read_settings_list}
-                open={this.props.open}
-                sections={sections}
-                toggleMenu={toggleMenu}
-                doBackFocusMenuButton={this.props.focusSettingMenuButton}
-            />
-        );
+            <DialogWithRadix>
+            <DialogWithRadixTrigger asChild>
+                <button
+                    className={stylesButtons.button_transparency_icon}
+                >
+                    <SVG ariaHidden={true} svg={SettingsIcon} />
+                </button>
+            </DialogWithRadixTrigger>
+            <DialogWithRadixContentSettings>
+                <ReadingOptions />
+            </DialogWithRadixContentSettings>
+        </DialogWithRadix>
+
+        )
+
+        // return (
+        //     <SideMenu
+        //         openedSection={this.props.openedSection}
+        //         className={stylesReader.read_settings}
+        //         listClassName={stylesReader.read_settings_list}
+        //         open={this.props.open}
+        //         sections={sections}
+        //         toggleMenu={toggleMenu}
+        //         doBackFocusMenuButton={this.props.focusSettingMenuButton}
+        //     />
+        // );
     }
 
     private setScale = (scale: IPdfPlayerScale) => {
@@ -1080,3 +1343,4 @@ const mapStateToProps = (_state: IReaderRootState) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTranslator(ReaderOptions));
+*/

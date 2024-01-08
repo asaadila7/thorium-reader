@@ -568,7 +568,7 @@ class Reader extends React.Component<IProps, IState> {
             open: this.state.settingsOpen,
             indexes: this.props.indexes,
             readerConfig: this.props.readerConfig,
-            handleSettingChange: this.handleSettingChange.bind(this),
+            // handleSettingChange: this.handleSettingChange.bind(this),
             handleIndexChange: this.handleIndexChange.bind(this),
             setSettings: this.setSettings,
             toggleMenu: this.handleSettingsClick,
@@ -2388,6 +2388,11 @@ class Reader extends React.Component<IProps, IState> {
             }, 300);
         }
 
+        // useful ? 
+        if (readerConfig.paged) {
+            readerConfig.enableMathJax = false;
+        }
+
         this.props.setConfig(readerConfig, this.props.session);
 
         if (this.props.r2Publication) {
@@ -2402,34 +2407,34 @@ class Reader extends React.Component<IProps, IState> {
         }
     }
 
-    private handleSettingChange(
-        event: TChangeEventOnInput | TChangeEventOnSelect | undefined,
-        name: keyof ReaderConfig,
-        givenValue?: string | boolean) {
+    // private handleSettingChange(
+    //     event: TChangeEventOnInput | TChangeEventOnSelect | undefined,
+    //     name: keyof ReaderConfig,
+    //     givenValue?: string | boolean) {
 
-        let value = givenValue;
-        if (value === null || value === undefined) {
-            if (event?.target?.value) {
-                value = event.target.value.toString();
-            } else {
-                return;
-            }
-        }
+    //     let value = givenValue;
+    //     if (value === null || value === undefined) {
+    //         if (event?.target?.value) {
+    //             value = event.target.value.toString();
+    //         } else {
+    //             return;
+    //         }
+    //     }
 
-        const readerConfig = r.clone(this.props.readerConfig);
+    //     const readerConfig = r.clone(this.props.readerConfig);
 
-        const typedName =
-            name as (typeof value extends string ? keyof ReaderConfigStrings : keyof ReaderConfigBooleans);
-        const typedValue =
-            value as (typeof value extends string ? string : boolean);
-        readerConfig[typedName] = typedValue;
+    //     const typedName =
+    //         name as (typeof value extends string ? keyof ReaderConfigStrings : keyof ReaderConfigBooleans);
+    //     const typedValue =
+    //         value as (typeof value extends string ? string : boolean);
+    //     readerConfig[typedName] = typedValue;
 
-        if (readerConfig.paged) {
-            readerConfig.enableMathJax = false;
-        }
+    //     if (readerConfig.paged) {
+    //         readerConfig.enableMathJax = false;
+    //     }
 
-        this.handleSettingsSave(readerConfig);
-    }
+    //     this.handleSettingsSave(readerConfig);
+    // }
 
     private handleIndexChange(event: TChangeEventOnInput, name: keyof ReaderConfigStringsAdjustables) {
 

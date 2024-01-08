@@ -49,7 +49,10 @@ export interface ReaderConfigStrings extends ReaderConfigStringsAdjustables {
 }
 
 export interface ReaderConfigBooleans {
+
+    // not used ? 
     dark: boolean;
+
     invert: boolean;
     night: boolean;
     paged: boolean;
@@ -66,6 +69,7 @@ export interface ReaderConfigBooleans {
 }
 
 export interface ReaderConfig extends ReaderConfigStrings, ReaderConfigBooleans {
+    overridePublisherDefault: boolean;
 }
 
 // export interface BookmarkCollection {
