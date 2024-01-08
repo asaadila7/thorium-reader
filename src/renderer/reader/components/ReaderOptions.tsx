@@ -137,15 +137,16 @@ export const FontSize = ({config: {fontSize}, set}: {config: Pick<ReaderConfig, 
 
 export const FontFamily = ({config: {font}, set}: {config: Pick<ReaderConfig, "font">, set: (a: Pick<ReaderConfig, "font">) => void}) => {
     const [__] = useTranslator();
+    const defaultinputvalue = "";
+    const [inputval, setInputval] = React.useState(defaultinputvalue);
 
     // font string value is the ID from FontList or a custom css font name
 
-    console.log("RENDERED FONT ", font);
-
-    // !!! why only 5 items in the combox works, one more trigger the keyboard interaction !!!
+    console.log("RENDERED FONT", font);
 
     // doesn't work :
     // when clicking on the combobox the popover menu disappears and the reader.tsx is refreshed
+    // work with less than 6 items in listbox otherwise it will be refreshed
 
     // logs :
 
@@ -278,9 +279,6 @@ export const FontFamily = ({config: {font}, set}: {config: Pick<ReaderConfig, "f
         }
         set({ font: val });
     };
-
-    const defaultinputvalue = "";
-    const [inputval, setInputval] = React.useState(defaultinputvalue);
 
     return (
         <div className={stylesSettings.section}>
