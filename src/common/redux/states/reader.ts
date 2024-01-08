@@ -9,6 +9,7 @@ import { ReaderConfig } from "readium-desktop/common/models/reader";
 import { FONT_ID_DEFAULT } from "readium-desktop/utils/fontList";
 
 export const readerConfigInitialState: ReaderConfig = {
+    overridePublisherDefault: false,
     align: "auto",
     colCount: "auto",
     dark: false,

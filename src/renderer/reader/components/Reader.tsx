@@ -17,7 +17,7 @@ import { isDivinaFn, isPdfFn } from "readium-desktop/common/isManifestType";
 import { DEBUG_KEYBOARD, keyboardShortcutsMatch } from "readium-desktop/common/keyboard";
 import { DialogTypeName } from "readium-desktop/common/models/dialog";
 import {
-    ReaderConfig, ReaderConfigBooleans, ReaderConfigStrings, ReaderConfigStringsAdjustables,
+    ReaderConfig, ReaderConfigStringsAdjustables,
 } from "readium-desktop/common/models/reader";
 import { ToastType } from "readium-desktop/common/models/toast";
 import { dialogActions, readerActions, toastActions } from "readium-desktop/common/redux/actions";
@@ -47,7 +47,7 @@ import {
 import ReaderFooter from "readium-desktop/renderer/reader/components/ReaderFooter";
 import ReaderHeader from "readium-desktop/renderer/reader/components/ReaderHeader";
 import {
-    TChangeEventOnInput, TChangeEventOnSelect, TKeyboardEventOnAnchor, TMouseEventOnAnchor,
+    TChangeEventOnInput, TKeyboardEventOnAnchor, TMouseEventOnAnchor,
     TMouseEventOnSpan,
 } from "readium-desktop/typings/react";
 import { TDispatch } from "readium-desktop/typings/redux";
@@ -2386,11 +2386,6 @@ class Reader extends React.Component<IProps, IState> {
             setTimeout(() => {
                 ttsPlay(parseFloat(this.state.ttsPlaybackRate), this.state.ttsVoice);
             }, 300);
-        }
-
-        // useful ? 
-        if (readerConfig.paged) {
-            readerConfig.enableMathJax = false;
         }
 
         this.props.setConfig(readerConfig, this.props.session);

@@ -7,7 +7,7 @@
 
 import { ReaderConfig, ReaderConfigStringsAdjustables } from "readium-desktop/common/models/reader";
 import {
-    TChangeEventOnInput, TChangeEventOnSelect, TKeyboardEventOnAnchor, TMouseEventOnAnchor,
+    TChangeEventOnInput, TKeyboardEventOnAnchor, TMouseEventOnAnchor,
     TMouseEventOnSpan,
 } from "readium-desktop/typings/react";
 

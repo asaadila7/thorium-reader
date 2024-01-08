@@ -50,7 +50,7 @@ export interface ReaderConfigStrings extends ReaderConfigStringsAdjustables {
 
 export interface ReaderConfigBooleans {
 
-    // not used ? 
+    // not used ?
     dark: boolean;
 
     invert: boolean;
