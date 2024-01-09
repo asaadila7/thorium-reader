@@ -26,18 +26,18 @@
   min-width: 700px;
   align-items: center;
   justify-content: center;
+
+  &_hidden {
+    position: fixed;
+    z-index: 101;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
 }
 
-.modal_dialog_overlay_hidden {
-  position: fixed;
-  z-index: 101;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.modal_dialog {
+.modal_dialog, .modal_dialog_reader {
   margin: 30px;
   min-height: 400px;
   min-width: 700px;
@@ -47,17 +47,40 @@
   z-index: 102;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-secondary);
   overflow-y: auto;
   overflow-x: hidden;
   align-content: flex-start;
-  color: var(--color-primary);;
   position: relative;
   box-sizing: border-box;
 
-  &.modal_dialog_full {
+  &_full {
     width: calc(100vw - 60px);
     height: calc(100vh - 60px);
+  }
+}
+
+.modal_dialog {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+
+  &_reader {
+    .display_options_item {
+      background-color: transparent;
+      color: var(--reader-fontColor);
+    }
+    .settings_container {
+      background-color: var(--reader-secondaryColor);
+    }
+    color: var(--reader-fontColor);
+    .react_aria_ComboBox {
+      .react_aria_Button {
+        background-color: var(--reader-secondaryColor);
+      }
+      .react_aria_Input {
+        background-color: var(--reader-secondaryColor);    
+        color: var(--reader-fontColor);
+      }
+    }
   }
 }
 
@@ -76,7 +99,7 @@
   overflow-x: hidden;
   overflow-y: auto;
 
-  &.modal_dialog_body_centered {
+  &_centered {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -90,7 +90,7 @@ button {
   background: none;
   border: 0;
   cursor: pointer;
-  color: var(--reader-fontColor) !important;
+  /* color: var(--reader-fontColor) !important; */
   fill: var(--reader-fontColor) !important;
   height: auto;
 
@@ -1016,7 +1016,7 @@ p.chapters_description {
   }
 }
 
-#option_colonne,
+/* #option_colonne,
 #option_colonne1,
 #option_colonne2 {
   display: inline-block;
@@ -1026,9 +1026,9 @@ p.chapters_description {
   vertical-align: baseline;
   height: 70px;
   width: 63px;
-}
+} */
 
-#option_auto,
+/* #option_auto,
 #option_justif,
 #option_start,
 #scroll_option,
@@ -1040,7 +1040,7 @@ p.chapters_description {
   vertical-align: baseline;
   height: 15px;
   width: 20px;
-}
+} */
 
 input[type=number] {
   padding: 10px;

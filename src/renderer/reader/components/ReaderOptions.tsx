@@ -11,7 +11,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import classNames from "classnames";
 import * as QuitIcon from "readium-desktop/renderer/assets/icons/baseline-close-24px.svg";
-import * as stylesModals from "readium-desktop/renderer/assets/styles/components/modals.css";
+import * as stylesModals from "readium-desktop/renderer/assets/styles/components/modals.scss";
 import * as TextAreaIcon from "readium-desktop/renderer/assets/icons/textarea-icon.svg";
 import * as LayoutIcon from "readium-desktop/renderer/assets/icons/layout-icon.svg";
 import * as AlignLeftIcon from "readium-desktop/renderer/assets/icons/alignleft-icon.svg";
@@ -22,7 +22,7 @@ import * as PaginatedIcon from "readium-desktop/renderer/assets/icons/page-icon.
 import * as TwoColsIcon from "readium-desktop/renderer/assets/icons/2cols-icon.svg";
 import * as AlignAutoIcon from "readium-desktop/renderer/assets/icons/align-auto-icon.svg";
 import * as AlignJustifyIcon from "readium-desktop/renderer/assets/icons/align-justify-icon.svg";
-import * as AlignRightIcon from "readium-desktop/renderer/assets/icons/align-right-icon.svg";
+// import * as AlignLefttIcon from "readium-desktop/renderer/assets/icons/alignleft-icon.svg";
 import * as DoneIcon from "readium-desktop/renderer/assets/icons/done.svg";
 import SVG, { ISVGProps } from "readium-desktop/renderer/common/components/SVG";
 import { IPdfPlayerColumn, IPdfPlayerScale, IPdfPlayerView } from "../pdf/common/pdfReader.type";
@@ -110,7 +110,7 @@ export const FontSize = ({config: {fontSize}, set}: {config: Pick<ReaderConfig, 
     };
 
     return (
-        <section className={stylesSettings.section}>
+        <section>
             <h4>{__("reader.settings.fontSize")} ({fontSize})</h4>
             <div className={stylesSettings.size_range}>
                 <button onClick={() => click("out")} className={stylesSettings.scale_button}><span>-</span></button>
@@ -281,7 +281,7 @@ export const FontFamily = ({config: {font}, set}: {config: Pick<ReaderConfig, "f
     };
 
     return (
-        <div className={stylesSettings.section}>
+        <div>
             <ComboBox label={__("reader.settings.font")} defaultItems={options} selectedKey={defaultkey}
                 onSelectionChange={
                     (key: React.Key) => {
@@ -529,7 +529,7 @@ const ReadingDisplayAlign = ({ config: { align }, set }: { config: Pick<ReaderCo
                 >
                     <RadioGroupItem value="auto" description={`${__("reader.settings.column.auto")}`} svg={AlignAutoIcon} disabled={false} />
                     <RadioGroupItem value="justify" description={`${__("reader.settings.justify")}`} svg={AlignJustifyIcon} disabled={false} />
-                    <RadioGroupItem value="start" description={`${__("reader.svg.right")}`} svg={AlignRightIcon} disabled={false} />
+                    <RadioGroupItem value="start" description={`${__("reader.svg.left")}`} svg={AlignLeftIcon} disabled={false} />
             </RadioGroup.Root>
             </div>
         </section>
@@ -575,7 +575,7 @@ const ReadingAudio = ({ config: { mediaOverlaysEnableCaptionsMode: captions, med
     ];
 
     return (
-        <div>
+        <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px,1fr)", gap: "30px"}}>
             {options.map((option) => (
                 <section className={stylesSettings.section} key={option.id}>
                     <div>
@@ -788,6 +788,20 @@ const PdfZoom = ({pdfEventBus, pdfScale, pdfView}: Pick<IBaseProps, "pdfEventBus
     );
 };
 
+const AllowCustom = ({ config: { overridePublisherDefault }, set }:
+    { config: Pick<ReaderConfig, "overridePublisherDefault">,
+    set: (a: Partial<Pick<ReaderConfig, "overridePublisherDefault">>) => void }) => {
+    const [__] = useTranslator();
+        return(
+            <>
+                <input type="checkbox" checked={overridePublisherDefault} onChange={() => {set({ overridePublisherDefault: !overridePublisherDefault })}
+            }/>
+
+                <label>{__("reader.settings.customizeReader")}</label>
+            </>
+        )
+}
+
 
 export const ReaderOptions: React.FC<IBaseProps> = (props) => {
     const { setSettings, readerConfig, open, toggleMenu, pdfEventBus } = props;
@@ -865,8 +879,9 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
         return <></>;
     }
 
-    // const { overridePublisherDefault } = readerConfig;
-    const overridePublisherDefault = true;
+
+    const { overridePublisherDefault } = readerConfig;
+    // const overridePublisherDefault = true;
 
     // const setOverridePublisherDefault = () => {};
 
@@ -876,7 +891,7 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
     const sections: Array<React.JSX.Element> = [];
 
     const TextTrigger =
-        <Tabs.Trigger value="tab-text" disabled={overridePublisherDefault ? false : true} key={"tab-text"}>
+        <Tabs.Trigger value="tab-text" disabled={overridePublisherDefault ? false : true} key={"tab-text"} data-value={"tab-text"}>
             <SVG ariaHidden svg={TextAreaIcon} />
             <h3>{__("reader.settings.text")}</h3>
             {overridePublisherDefault ? <></> : <i>{__("reader.settings.disabled")}</i>}
@@ -889,7 +904,7 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
         </Tabs.Trigger>;
 
     const SpacingTrigger =
-        <Tabs.Trigger value="tab-spacing" disabled={overridePublisherDefault ? false : true} key={"tab-spacing"}>
+        <Tabs.Trigger value="tab-spacing" disabled={overridePublisherDefault ? false : true} key={"tab-spacing"} data-value={"tab-spacing"}>
             <SVG ariaHidden svg={AlignLeftIcon} />
             <h3>{__("reader.settings.spacing")}</h3>
             {overridePublisherDefault ? <></> : <i>{__("reader.settings.disabled")}</i>}
@@ -913,6 +928,12 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
             <h3>{__("reader.settings.pdfZoom.title")}</h3>
         </Tabs.Trigger>;
 
+    const AllowCustomContainer = 
+        <div className={stylesSettings.allowCustom}>
+            <AllowCustom config={readerConfig} set={setPartialSettingsDebounced} />
+        </div>
+
+
     let defaultTabValue = "tab-display";
     if (isDivina) {
         sections.push(DivinaTrigger);
@@ -927,6 +948,7 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
     }
     if (isEpub) {
         sections.push(AudioTrigger);
+        sections.push(AllowCustomContainer);
         sections.push(TextTrigger);
         sections.push(SpacingTrigger);
     }
@@ -946,7 +968,7 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
         >
             <Dialog.Portal>
                 <div className={stylesModals.modal_dialog_overlay}></div>
-                <Dialog.Content className={classNames(stylesModals.modal_dialog, nightTheme ? stylesReader.nightMode : sepiaTheme ? stylesReader.sepiaMode : "")}>
+                <Dialog.Content className={classNames(stylesModals.modal_dialog_reader, nightTheme ? stylesReader.nightMode : sepiaTheme ? stylesReader.sepiaMode : "")}>
                     <Tabs.Root defaultValue={defaultTabValue} data-orientation="vertical" orientation="vertical" className={stylesSettings.settings_container}>
                         <Tabs.List className={stylesSettings.settings_tabslist} aria-orientation="vertical" data-orientation="vertical">
                             {sections}
@@ -966,7 +988,7 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
                             </Tabs.Content>
                             <Tabs.Content value="tab-text" tabIndex={-1}>
                                 <TabTitle title={__("reader.settings.text")} />
-                                <div className={stylesSettings.settings_tab}>
+                                <div className={classNames(stylesSettings.settings_tab, stylesSettings.settings_reading_text, stylesSettings.section)}>
                                     <FontSize config={readerConfig} set={setPartialSettingsDebounced}/>
                                     <FontFamily config={readerConfig} set={setPartialSettingsDebounced}/>
                                 </div>
