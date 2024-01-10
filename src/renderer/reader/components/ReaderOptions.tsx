@@ -137,126 +137,31 @@ export const FontSize = ({config: {fontSize}, set}: {config: Pick<ReaderConfig, 
 
 export const FontFamily = ({config: {font}, set}: {config: Pick<ReaderConfig, "font">, set: (a: Pick<ReaderConfig, "font">) => void}) => {
     const [__] = useTranslator();
-    const defaultinputvalue = "";
-    const [inputval, setInputval] = React.useState(defaultinputvalue);
-
-    // font string value is the ID from FontList or a custom css font name
-
-    console.log("RENDERED FONT", font);
-
-    // doesn't work :
-    // when clicking on the combobox the popover menu disappears and the reader.tsx is refreshed
-    // work with less than 6 items in listbox otherwise it will be refreshed
-
-    // logs :
-
-    // [2]   r2:navigator#electron/renderer/webview/preload ++++ scrollToHashDebounced FROM RESIZE +360ms
-    // [2]   r2:navigator#electron/renderer/webview/preload ++++ scrollToHashRaw FROM DEBOUNCED +103ms
-    // [2]   r2:navigator#electron/renderer/webview/preload ++++ scrollToHashRaw +0ms
-    // [2]   r2:navigator#electron/renderer/webview/preload KEYBOARD FOCUS REQUEST (1)  p:nth-child(21) +1ms
-    // [2]   r2:navigator#electron/renderer/index KEYBOARD FOCUS REQUEST (2)  r2_webview1 react-aria5766539967-:r16: +435ms
-    // [2]   r2:navigator#electron/renderer/webview/preload focusin mouse click --- IGNORE +1ms
-    // [2]   r2:navigator#electron/renderer/webview/preload_ ^^^ SELECTION COLLAPSED. +254ms
-    // [2]   r2:navigator#electron/renderer/webview/preload preceding or containing EPUB page break 37 +1ms
-    // [2]   r2:navigator#electron/renderer/webview/preload preceding or containing heading undefined À la recherche d’une solution. +0ms
-    // [2]   r2:navigator#electron/renderer/webview/preload preceding or containing heading chap-3 III +0ms
-    // [2]   r2:navigator#electron/renderer/location >->-> +257ms
-    // [2]   r2:navigator#electron/renderer/location {
-    // [2]   r2:navigator#electron/renderer/location   audioPlaybackInfo: undefined,
-    // [2]   r2:navigator#electron/renderer/location   docInfo: {
-    // [2]   r2:navigator#electron/renderer/location     isFixedLayout: false,
-    // [2]   r2:navigator#electron/renderer/location     isRightToLeft: false,
-    // [2]   r2:navigator#electron/renderer/location     isVerticalWritingMode: false
-    // [2]   r2:navigator#electron/renderer/location   },
-    // [2]   r2:navigator#electron/renderer/location   epubPage: '37',
-    // [2]   r2:navigator#electron/renderer/location   epubPageID: 'page_37',
-    // [2]   r2:navigator#electron/renderer/location   headings: [
-    // [2]   r2:navigator#electron/renderer/location     { id: undefined, level: 2, txt: 'À la recherche d’une solution.' },
-    // [2]   r2:navigator#electron/renderer/location     { id: 'chap-3', level: 1, txt: 'III' }
-    // [2]   r2:navigator#electron/renderer/location   ],
-    // [2]   r2:navigator#electron/renderer/location   locator: {
-    // [2]   r2:navigator#electron/renderer/location     href: 'OPS/c3_La_Marque_des_quatre_III.xhtml',
-    // [2]   r2:navigator#electron/renderer/location     locations: {
-    // [2]   r2:navigator#electron/renderer/location       cfi: '/4/2[chap-3]/42',
-    // [2]   r2:navigator#electron/renderer/location       cssSelector: 'p:nth-child(21)',
-    // [2]   r2:navigator#electron/renderer/location       position: undefined,
-    // [2]   r2:navigator#electron/renderer/location       progression: 0.6110195667907361
-    // [2]   r2:navigator#electron/renderer/location     },
-    // [2]   r2:navigator#electron/renderer/location     text: undefined,
-    // [2]   r2:navigator#electron/renderer/location     title: 'À la recherche d’une solution'
-    // [2]   r2:navigator#electron/renderer/location   },
-    // [2]   r2:navigator#electron/renderer/location   paginationInfo: undefined,
-    // [2]   r2:navigator#electron/renderer/location   secondWebViewHref: undefined,
-    // [2]   r2:navigator#electron/renderer/location   selectionInfo: undefined,
-    // [2]   r2:navigator#electron/renderer/location   selectionIsNew: undefined
-    // [2]   r2:navigator#electron/renderer/location } +1ms
-    // [2]   r2:navigator#electron/renderer/index_ RENDERED FONT  dys3 +9ms
-    // [2]   r2:navigator#electron/renderer/index_ RENDERED FONT  dys3 +6ms
-    // [2]   r2:navigator#electron/renderer/index_ RENDERED FONT  dys3 +6ms
-    // [2]   r2:navigator#electron/renderer/index_ RENDERED FONT  dys3 +5ms
-    // [2]   r2:navigator#electron/renderer/webview/preload ANIMATION TIMEOUT REMOVE +2s
-
-
-    // const options = [
-    //     // { id: 0, value: 'DEFAULT', name: 'Original font', fontFamily: '' },
-    //     {
-    //       id: 1,
-    //       value: 'OLD',
-    //       name: 'Old Style',
-    //       fontFamily: '"Iowan Old Style", "Sitka Text", Palatino, "Book Antiqua", serif'
-    //     },
-    //     {
-    //       id: 2,
-    //       value: 'MODERN',
-    //       name: 'Modern',
-    //       fontFamily: 'Athelas, Constantia, Georgia, serif'
-    //     },
-    //     {
-    //       id: 3,
-    //       value: 'SANS',
-    //       name: 'Sans',
-    //       fontFamily: '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
-    //     },
-    //     {
-    //       id: 4,
-    //       value: 'HUMAN',
-    //       name: 'Humanist',
-    //       fontFamily: 'Seravek, Calibri, Roboto, Arial, sans-serif'
-    //     },
-    //     {
-    //       id: 5,
-    //       value: 'DYS',
-    //       name: 'Readable (dys)',
-    //       fontFamily: 'AccessibleDfa'
-    //     },
-    //     // {
-    //     //   id: 6,
-    //     //   value: 'DUO',
-    //     //   name: 'Duospace',
-    //     //   fontFamily: '"IA Writer Duospace", Consolas, monospace'
-    //     // },
-    //     {
-    //       id: 7,
-    //       value: 'MONO',
-    //       name: 'Monospace',
-    //       fontFamily: '"Andale Mono", Consolas, monospace'
-    //     }
-    //   ]
-
 
     const options = fontList.map((fontItem, id) => ({ id, value: fontItem.id, name: fontItem.label, fontFamily: fontItem.fontFamily }));
-    if (fontList.findIndex((v) => v.id === font) < 0) {
-        options.push({
-            id: fontList.length,
-            value: font,
-            name: font,
-            fontFamily: `${font}, Consolas, monospace`,
-        });
-    }
-    const selected = options.find((v) => v.value === font) || options[0];
+    // if (fontList.findIndex((v) => v.id === font) < 0) {
+    //     options.push({
+    //         id: fontList.length,
+    //         value: font,
+    //         name: font,
+    //         fontFamily: `${font}, Consolas, monospace`,
+    //     });
+    // }
+
+    // console.log(options);
+    const selected = options.find((v) => v.value === font) || {
+        id: fontList.length,
+        value: font,
+        name: font,
+        fontFamily: `${font}, Consolas, monospace`,
+    };
+    // console.log(selected);
+
     const defaultkey = selected.id;
     const fontFamily = selected.fontFamily;
     const fontName = selected.name;
+
+    const [inputval, setInputval] = React.useState(fontName);
 
     const saveFont = (value: string) => {
         let val = value.trim();
@@ -285,20 +190,26 @@ export const FontFamily = ({config: {font}, set}: {config: Pick<ReaderConfig, "f
             <ComboBox label={__("reader.settings.font")} defaultItems={options} selectedKey={defaultkey}
                 onSelectionChange={
                     (key: React.Key) => {
-                        console.log(key);
+                        // console.log("@@@@@");
+                        // console.log("@@@@@");
+                        // console.log(key);
+                        // console.log("@@@@@");
+                        // console.log("@@@@@");
+
                         if (key === null) {
-                            console.log("fontList new custom value= ",inputval);
-                            saveFont(inputval);
+                            const notFound = !options.find((v) => v.name === inputval);
+                            // console.log("fontList save notFound=", notFound);
+                            if (notFound) saveFont(inputval);
                         } else {
-                            const value = options.find((v) => v.id === key).value;
-                            console.log("fontList save ",value);
-                            saveFont(value);
+                            const found = options.find((v) => v.id === key);
+                            // console.log("fontList save ",found.value);
+                            saveFont(found.value);
                         }
                     }}
                 svg={TextAreaIcon}
                 allowsCustomValue
                 onInputChange={(v) => setInputval(v)}
-                defaultInputValue={defaultinputvalue}>
+            >
                 {item => <ComboBoxItem>{item.name}</ComboBoxItem>}
             </ComboBox>
             <span
@@ -794,10 +705,10 @@ const AllowCustom = ({ overridePublisherDefault, set }:
     const [__] = useTranslator();
         return(
             <>
-                <input type="checkbox" checked={overridePublisherDefault} onChange={() => {set();}
+                <input id="allow-custom" type="checkbox" checked={overridePublisherDefault} onChange={() => {set();}
             }/>
 
-                <label>{__("reader.settings.customizeReader")}</label>
+                <label htmlFor="allow-custom">{__("reader.settings.customizeReader")}</label>
             </>
         );
 };
