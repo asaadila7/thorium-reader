@@ -69,7 +69,6 @@ export interface ReaderConfigBooleans {
 }
 
 export interface ReaderConfig extends ReaderConfigStrings, ReaderConfigBooleans {
-    overridePublisherDefault: boolean;
 }
 
 // export interface BookmarkCollection {

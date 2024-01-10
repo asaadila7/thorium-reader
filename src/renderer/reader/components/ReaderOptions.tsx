@@ -35,7 +35,7 @@ import { ReaderConfig } from "readium-desktop/common/models/reader";
 import * as stylesReader from "readium-desktop/renderer/assets/styles/reader-app.css";
 import debounce from "debounce";
 import fontList from "readium-desktop/utils/fontList";
-import { readerConfigInitialState } from "readium-desktop/common/redux/states/reader";
+import { readerConfigInitialState, readerConfigInitialStateDefaultPublisher } from "readium-desktop/common/redux/states/reader";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IBaseProps extends IReaderOptionsProps {
@@ -788,19 +788,19 @@ const PdfZoom = ({pdfEventBus, pdfScale, pdfView}: Pick<IBaseProps, "pdfEventBus
     );
 };
 
-const AllowCustom = ({ config: { overridePublisherDefault }, set }:
-    { config: Pick<ReaderConfig, "overridePublisherDefault">,
-    set: (a: Partial<Pick<ReaderConfig, "overridePublisherDefault">>) => void }) => {
+const AllowCustom = ({ overridePublisherDefault, set }:
+    { overridePublisherDefault: boolean,
+    set: () => void }) => {
     const [__] = useTranslator();
         return(
             <>
-                <input type="checkbox" checked={overridePublisherDefault} onChange={() => {set({ overridePublisherDefault: !overridePublisherDefault })}
+                <input type="checkbox" checked={overridePublisherDefault} onChange={() => {set();}
             }/>
 
                 <label>{__("reader.settings.customizeReader")}</label>
             </>
-        )
-}
+        );
+};
 
 
 export const ReaderOptions: React.FC<IBaseProps> = (props) => {
@@ -863,12 +863,37 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
             setSettings({...readerConfig, ...config});
         };
         return debounce(saveConfig, 400);
-    }, []);
+    }, [readerConfig]);
 
     React.useEffect(() => {
         setPartialSettingsDebounced.clear();
         return () => setPartialSettingsDebounced.flush();
-    }, []);
+    }, [setPartialSettingsDebounced]);
+
+    const [overridePublisherDefault, setOverride] = React.useState(false);
+    const [tabValue, setTabValue] = React.useState("tab-display");
+
+    React.useEffect(() => {
+        let ov = false;
+        for (const [key,value] of Object.entries(readerConfigInitialStateDefaultPublisher)) {
+            if (readerConfig[key as keyof typeof readerConfigInitialState] === value) continue;
+            else {
+                ov = true;
+                break;
+            }
+        }
+        setOverride(ov);
+    }, [readerConfig]);
+
+    const setOverridePublisherDefault = React.useMemo(() => () => {
+        if (overridePublisherDefault) {
+            setPartialSettingsDebounced(readerConfigInitialStateDefaultPublisher);
+            setTabValue("tab-display");
+        } else {
+            setOverride(true);
+            setTabValue("tab-text");
+        }
+    }, [overridePublisherDefault]);
 
 
     if (!readerConfig) {
@@ -878,12 +903,6 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
     if (!open) {
         return <></>;
     }
-
-
-    const { overridePublisherDefault } = readerConfig;
-    // const overridePublisherDefault = true;
-
-    // const setOverridePublisherDefault = () => {};
 
     const { isDivina, isPdf } = props;
     const isEpub = !isDivina && !isPdf;
@@ -928,20 +947,19 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
             <h3>{__("reader.settings.pdfZoom.title")}</h3>
         </Tabs.Trigger>;
 
-    const AllowCustomContainer = 
+    const AllowCustomContainer =
         <div className={stylesSettings.allowCustom}>
-            <AllowCustom config={readerConfig} set={setPartialSettingsDebounced} />
-        </div>
+            <AllowCustom overridePublisherDefault={overridePublisherDefault} set={setOverridePublisherDefault} />
+        </div>;
 
 
-    let defaultTabValue = "tab-display";
     if (isDivina) {
         sections.push(DivinaTrigger);
-        defaultTabValue = "tab-divina";
+        setTabValue("tab-divina");
     }
     if (isPdf) {
         sections.push(PdfZoomTrigger);
-        defaultTabValue = "tab-pdfzoom";
+        setTabValue("tab-pdfzoom");
     }
     if (isPdf || isEpub) {
         sections.push(DisplayTrigger);
@@ -969,7 +987,7 @@ export const ReaderOptions: React.FC<IBaseProps> = (props) => {
             <Dialog.Portal>
                 <div className={stylesModals.modal_dialog_overlay}></div>
                 <Dialog.Content className={classNames(stylesModals.modal_dialog_reader, nightTheme ? stylesReader.nightMode : sepiaTheme ? stylesReader.sepiaMode : "")}>
-                    <Tabs.Root defaultValue={defaultTabValue} data-orientation="vertical" orientation="vertical" className={stylesSettings.settings_container}>
+                    <Tabs.Root value={tabValue} defaultValue={tabValue} onValueChange={setTabValue} data-orientation="vertical" orientation="vertical" className={stylesSettings.settings_container}>
                         <Tabs.List className={stylesSettings.settings_tabslist} aria-orientation="vertical" data-orientation="vertical">
                             {sections}
                         </Tabs.List>
