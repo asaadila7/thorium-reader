@@ -554,7 +554,37 @@ export class ReaderMenu extends React.Component<IProps, IState> {
         }
         return undefined;
     }
+private renderHighlightList(): JSX.Element {
+    // Fetch your highlights from the app state (replace with actual implementation)
+    const highlights = this.props.highlights || [];
 
+    return (
+        <ul
+            aria-label={__("reader.marks.highlights")}
+            className={stylesReader.chapters_content}
+            role={"list"}
+        >
+            {highlights.map((highlight, i) => (
+                <li
+                    key={i}
+                    aria-level={1}
+                    role={"listitem"}
+                >
+                    {/* Render your highlight item here */}
+                    {/* Use appropriate UI for displaying and interacting with the highlight */}
+                    <div className={stylesReader.highlightItem}>
+                        <span>{highlight.text}</span>
+                        <button
+                            onClick={() => this.handleHighlightClick(highlight)}
+                        >
+                            Remove
+                        </button>
+                    </div>
+                </li>
+            ))}
+        </ul>
+    );
+}
     private buildGoToPageSection(totalPages?: string) {
         if (!this.props.r2Publication || this.props.isDivina) {
             return <></>;
