@@ -152,11 +152,11 @@ export class ReaderMenu extends React.Component<IProps, IState> {
                 content: this.createBookmarkList(),
                 disabled: !bookmarks || bookmarks.length === 0,
             },
-            /*{
-                title: __("reader.marks.annotations"),
-                content: <></>,
-                disabled: true,
-            },*/
+            {
+                title: __("reader.marks.highlights"),
+                content: this.renderHighlightList(), // Define this function to render the list of highlights
+                disabled: !highlights || highlights.length === 0, 
+            },
             {
                 title: __("reader.marks.search"),
                 content: this.props.searchEnable
